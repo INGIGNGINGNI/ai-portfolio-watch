@@ -1,0 +1,138 @@
+/* ==========================================================================
+   efin.finance — Design Tokens
+   ถอดจาก RoboLab (robolab-beta.vercel.app) — ชุดแรกคือค่า :root ของ RoboLab ตรงตัว
+   ชุด "extended" คือค่าที่ RoboLab ใช้ซ้ำแบบ hardcode ในคอมโพเนนต์ ยกขึ้นมาเป็น token
+   ========================================================================== */
+
+:root {
+  /* ---------- Color · core (RoboLab :root) ---------- */
+  --color-white: #fff;
+  --color-black: #000;
+  --color-primary: #007dfe;           /* efin blue — ปุ่ม ลิงก์ ไอคอน ไฮไลต์ */
+  --color-text-primary: #25272c;      /* หัวข้อ + เนื้อหาหลัก */
+  --color-text-secondary: #5b616e;    /* คำอธิบาย */
+  --color-text-tertiary: #8e95a2;     /* sub-label / caption */
+  --color-text-muted: #858585;
+  --color-dark-navy: #13243e;
+  --color-navy-deep: #0a2a50;
+  --color-navy-mid: #111b25;
+  --color-blue-50: #edfaff;           /* พื้นหลัง hero / quote / badge */
+  --color-blue-100: #d6f2ff;          /* chip / timer box */
+  --color-roadmap-end: #d9edff;
+  --color-pricing-border: #bfd7fe;
+  --color-blue-gray: #9fb0c2;
+  --color-border: #e9ebf0;
+  --color-border-light: #d9d9d9;
+  --color-border-mid: #eaeaea;
+  --color-off-white: #fbfbfb;
+  --color-error: #f87171;
+  --color-error-red: #ef4444;
+  --color-success-bg: #dffade;
+  --color-success-green: #40bc7c;
+  --color-success-dark: #4f7417;
+  --color-live-green: #6bd297;
+  --color-after-start: #002d5a;
+  --color-after-end: #1382f3;
+
+  /* ---------- Color · extended (hardcoded ใน RoboLab → token) ---------- */
+  --color-primary-hover: #0d539b;     /* hover ปุ่ม solid */
+  --color-primary-ring: #1899ff;      /* hover ขอบปุ่ม outline */
+  --color-blue-25: #f5f9ff;           /* พื้นการ์ด roadmap */
+  --color-instructor-start: #f5faff;
+  --color-instructor-end: #dff0ff;
+  --color-divider: #b6bac3;
+  --color-on-dark-muted: #b6c3d2;
+  --color-lime: #94d227;              /* check บนพื้นเข้ม */
+  --color-warning: #fbab24;
+  --color-warning-bg: #fff8eb;
+  --color-danger-bg: #fee2e2;
+  --color-danger-soft-bg: #fff1f1;
+  --color-danger-text: #a10000;
+  --color-danger-icon: #e64040;
+
+  /* ---------- Typography ---------- */
+  --font-thai: 'Noto Sans Thai', sans-serif;
+  --font-en: 'Noto Sans Thai', sans-serif;
+  --font-num: 'Inter', sans-serif;   /* ตัวเลขใหญ่ / badge */
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-base: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 24px;
+  --text-2xl: 32px;
+  --text-3xl: 40px;
+  --text-4xl: 48px;
+  --lh-tight: 1.3;
+  --lh-normal: 1.5;
+  --lh-body: 1.6;
+  --lh-loose: 1.8;
+
+  /* ---------- Spacing ---------- */
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 40px;
+  --spacing-xl: 64px;
+  --spacing-2xl: 80px;
+  --section-y: 72px;                  /* padding บน-ล่างมาตรฐานของ section */
+  --section-gap: 48px;                /* ระยะ header → เนื้อหา */
+
+  /* ---------- Layout ---------- */
+  --container: 1200px;
+  --container-wide: 1296px;           /* navbar / pricing */
+  --container-narrow: 820px;          /* FAQ */
+
+  /* ---------- Radius ---------- */
+  --r-xs: 6px;                        /* tag สี่เหลี่ยม */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+  --r-2xl: 32px;                      /* frame ใหญ่ (features) */
+  --r-full: 9999px;
+
+  /* ---------- Shadow ---------- */
+  --shadow-nav: 0 12px 20px #0040a214, inset 0 1px #fff9;
+  --shadow-nav-scrolled: 0 12px 20px #0040a214, 0 2px 8px #0000000f;
+  --shadow-card-hover: 0 4px 24px #00000014;
+  --shadow-soft: 0 4px 20px 13px #002a690d;
+  --shadow-bar: 0 -4px 16px #00000014;
+  --shadow-pop: 0 8px 24px #0000001a;
+
+  /* ---------- Gradient ---------- */
+  --grad-hero: linear-gradient(to bottom, #edfaff 0%, #fff 100%);
+  --grad-roadmap: linear-gradient(to bottom, #fff 0%, #d9edff 100%);
+  --grad-roadmap-full: linear-gradient(#fff 0%, #d9edff 100%), radial-gradient(circle at 50% 100%, #007dfe1c 0%, #d9edff 100%), linear-gradient(#fff0 0%, #fff 100%); /* ค่าเต็มของ RoboLab #roadmap */
+  --grad-vsl: linear-gradient(160deg, #0a2a50 3.8%, #111b25 96.2%);
+  --grad-finalcta: linear-gradient(to bottom, #ffffff80 12%, #d6f2ff 100%);
+  --grad-after-card: linear-gradient(135deg, #002d5a 0%, #1382f3 100%);
+  --grad-guarantee-card: linear-gradient(160deg, #0a2a50 3.8%, #111b25 96.2%);
+  --grad-text: linear-gradient(90deg, #002d5a 0%, #1382f3 100%);       /* ข้อความไล่สี */
+  --grad-text-silver: linear-gradient(99deg, #fff 0%, #c9c9c9 100%);   /* ข้อความไล่สีเงินบนพื้นเข้ม (ราคา 7,900) */
+  --grad-dark-card: linear-gradient(-42deg, #0a2a50 0%, #111b25 95%);
+  --grad-instructor: linear-gradient(#f5faff 0%, #dff0ff 100%);
+  --grad-card-light: linear-gradient(#fff0 0%, #ffffff29 100%),
+    radial-gradient(circle at 50% 100%, #007dfe08 0%, #d9edff3d 100%),
+    linear-gradient(#fff 0%, #d9edff 100%);
+  /* section แบบต่อเนื่อง: เริ่มด้วยสีที่ section ก่อนหน้าจบ แล้วคืนเป็นขาวก่อน section ถัดไป → รอยต่อกลืนกัน */
+  --grad-flow-instructor: linear-gradient(to bottom, #fff 0%, #f5faff 14%, #dff0ff 100%);
+  --grad-flow-support: linear-gradient(to bottom, #dff0ff 0%, #e8f5ff 100%); /* ต่อจากผู้สอนด้านบน · ล่างตัดชัดเข้าขาว */
+  --grad-key-visual-border: linear-gradient(#007dfe 0%, #d6f2ff 100%);
+
+  /* ---------- Texture ---------- */
+  /* ลายตารางเส้นประบนการ์ดเข้ม: หน้าตาเดียวกับ card-texture.webp (ขาว α .075 · เส้น 1.6px · ประ 6/6 · ใช้คู่ opacity .4)
+     แต่เป็น tile ช่อง 48px คงที่ ไม่โตตามขนาดการ์ดแบบภาพ cover */
+  --tex-grid-dashed: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cg fill='none' stroke='%23fff' stroke-opacity='.075' stroke-width='1.6' stroke-dasharray='6 6'%3E%3Cpath d='M.8 0v48'/%3E%3Cpath d='M0 .8h48'/%3E%3C/g%3E%3C/svg%3E") center / 48px 48px;
+
+  /* ---------- Motion ---------- */
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --dur-fast: .15s;
+  --dur: .2s;
+  --dur-reveal: .6s;
+
+  /* ---------- Layer ---------- */
+  --z-nav: 1000;
+  --z-bottom-bar: 998;
+  --z-backtop: 500;
+}
