@@ -233,6 +233,50 @@
     update();
   })();
 
+  /* ---------- Accordion (details.disclosure): ยืด-หด .35s ease แบบ RoboLab (.faq-answer max-height .35s) ----------
+     ใช้ <details>/<summary> เดิม (อ่านสถานะเปิด/ปิดได้เอง) แค่เพิ่มการยืดความสูง · ใน .faq-list เปิดได้ทีละข้อ
+     ไม่มี JS / reduced motion = เปิดปิดทันที */
+  (function disclosures() {
+    var items = Array.prototype.slice.call(document.querySelectorAll('details.disclosure'));
+    if (!items.length) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* open = สถานะที่ต้องการ · ระหว่างหด [open] ยังอยู่ (ให้เห็นเนื้อหา) จึงใส่ .is-closing ให้ CSS แสดงหน้าตาแบบปิดทันที */
+    function toggle(d, open) {
+      d._target = open;
+      var from = d.offsetHeight; /* ความสูงปัจจุบัน (รวมกรณีกำลังยืด/หดค้างอยู่) */
+      if (d._anim) { d._anim.cancel(); d._anim = null; }
+      d.classList.toggle('is-closing', !open);
+      if (reduce || !d.animate) { d.open = open; d.classList.remove('is-closing'); return; }
+      d.open = true;
+      var frame = d.offsetHeight - d.clientHeight; /* ขอบบน+ล่าง */
+      var to = open ? d.offsetHeight : d.querySelector('summary').offsetHeight + frame;
+      var anim = d.animate({ height: [from + 'px', to + 'px'] }, { duration: 350, easing: 'ease', fill: 'forwards' });
+      d._anim = anim;
+      anim.onfinish = function () {
+        if (!open) { d.open = false; d.classList.remove('is-closing'); }
+        anim.cancel(); /* คืนความสูงอัตโนมัติ */
+        if (d._anim === anim) d._anim = null;
+      };
+    }
+
+    items.forEach(function (d) {
+      var summary = d.querySelector('summary');
+      if (!summary) return;
+      summary.addEventListener('click', function (e) {
+        e.preventDefault();
+        var want = !(d._anim ? d._target : d.open);
+        var group = want && d.closest('.faq-list');
+        if (group) {
+          Array.prototype.forEach.call(group.querySelectorAll('details.disclosure'), function (o) {
+            if (o !== d && (o._anim ? o._target : o.open)) toggle(o, false);
+          });
+        }
+        toggle(d, want);
+      });
+    });
+  })();
+
   /* ---------- หัวข้อเรียน: tab วันที่ 1 / วันที่ 2 (WAI-ARIA tabs: คลิก, ←/→, Home/End) ----------
      ไม่มี JS = tablist ซ่อน (hidden) และการ์ดเรียงลงมาทั้ง 2 ใบ */
   (function dayTabs() {

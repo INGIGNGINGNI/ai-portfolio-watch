@@ -1111,7 +1111,8 @@ section[id] {
     /* parallax: เลื่อนลงตาม scroll × ความลึกของใบ (--hero-scroll มาจาก JS) */
     --fl-py: calc(var(--hero-scroll, 0px) * var(--fl-depth, .14));
     transform: translateY(var(--fl-py));
-    /* โหลดหน้า: เลื่อนจากด้านนอกเข้าตำแหน่ง (fl-in) แล้วลอยขึ้นลงต่อ (float) */
+    /* โหลดหน้า: ทุกใบเลื่อนจากด้านนอกเข้าตำแหน่งพร้อมกัน (fl-in) และเริ่มลอยขึ้นลงพร้อมกัน (float)
+       รอบถัดไปไม่ตรงกันเพราะแต่ละใบใช้เวลาต่อรอบไม่เท่ากัน (--fl-bob) */
     animation:
         fl-in 1.1s cubic-bezier(.22, 1, .36, 1) var(--fl-in-delay, .4s) backwards,
         float var(--fl-bob, 7s) ease-in-out var(--fl-float-delay, 0s) infinite;
@@ -1140,7 +1141,6 @@ section[id] {
     rotate: -3deg;
     transform-origin: 0 0;
     --fl-from: translate(-120px, -24px) rotate(-6deg);
-    --fl-in-delay: .45s;
     --fl-depth: .2;
 }
 
@@ -1151,9 +1151,7 @@ section[id] {
     rotate: 3deg;
     transform-origin: 100% 0;
     --fl-from: translate(120px, -24px) rotate(6deg);
-    --fl-in-delay: .6s;
     --fl-depth: .16;
-    --fl-float-delay: -2s;
 }
 
 .fl--nvdr {
@@ -1163,9 +1161,7 @@ section[id] {
     rotate: 2deg;
     transform-origin: 0 100%;
     --fl-from: translate(-120px, 40px) rotate(5deg);
-    --fl-in-delay: .75s;
     --fl-depth: .1;
-    --fl-float-delay: -4s;
 }
 
 .fl--pie {
@@ -1175,9 +1171,7 @@ section[id] {
     rotate: -2deg;
     transform-origin: 100% 100%;
     --fl-from: translate(120px, 40px) rotate(-5deg);
-    --fl-in-delay: .9s;
     --fl-depth: .12;
-    --fl-float-delay: -1s;
 }
 
 /* จอ 1281–1365: ขยับการ์ดข่าวชิดขอบขวาขึ้น ไม่ให้ทับคำอธิบาย */
@@ -1446,30 +1440,31 @@ section[id] {
 }
 
 /* ---------- animation เล็กๆ ภายในการ์ดลอย (วนไปมา: วาดเข้า → ค้าง → ถอยกลับ) ----------
-   แต่ละใบเริ่มไม่พร้อมกัน (--fl-loop-delay) และเร็วช้าต่างกัน (--fl-loop-dur) จึงไม่เคยตรงจังหวะกัน
-   · ใช้ alternate ให้วนลื่นไม่กระพริบ */
+   ทุกใบเริ่มพร้อมกันหลังการ์ดเข้าเสร็จ (--fl-loop-delay 1.4s เท่ากัน) แต่ใช้เวลาต่อรอบต่างกัน (--fl-loop-dur)
+   → รอบแรกเล่นพร้อมกัน รอบถัดไปค่อยๆ เหลื่อมกันจนไม่ตรงจังหวะ · ใช้ alternate ให้วนลื่นไม่กระพริบ
+   --fl-bob = จังหวะลอยขึ้นลงของการ์ด (เร็วขึ้นจากเดิม ~30% · ต่างกันทุกใบด้วยเหตุผลเดียวกัน) */
+.fl {
+    --fl-loop-delay: 1.4s;
+}
+
 .fl--chart {
-    --fl-loop-delay: 1.6s;
-    --fl-bob: 6.5s; /* จังหวะลอยขึ้นลงของการ์ด */
-    --fl-loop-dur: 6s;
+    --fl-bob: 4.5s;
+    --fl-loop-dur: 3.6s;
 }
 
 .fl--nvdr {
-    --fl-loop-delay: 2.7s;
-    --fl-bob: 7.5s; /* จังหวะลอยขึ้นลงของการ์ด */
-    --fl-loop-dur: 8.5s;
+    --fl-bob: 5.2s;
+    --fl-loop-dur: 2.8s; /* วาดแท่งเสร็จใน ~1.3s (30% ของรอบ + ไล่ทีละแท่ง 50ms) */
 }
 
 .fl--news {
-    --fl-loop-delay: 3.4s;
-    --fl-bob: 8.5s; /* จังหวะลอยขึ้นลงของการ์ด */
-    --fl-loop-dur: 12s;
+    --fl-bob: 6s;
+    --fl-loop-dur: 7.2s;
 }
 
 .fl--pie {
-    --fl-loop-delay: 4.6s;
-    --fl-bob: 7s; /* จังหวะลอยขึ้นลงของการ์ด */
-    --fl-loop-dur: 10s;
+    --fl-bob: 4.9s;
+    --fl-loop-dur: 3.2s; /* วาดโดนัทเสร็จใน ~1.1s (35% ของรอบ) */
 }
 
 /* กราฟเส้น: เส้น + พื้นค่อยๆ วาดจากซ้ายไปขวา แล้วจุดปลายเส้นเต้น */
@@ -1563,7 +1558,7 @@ section[id] {
 .fl-bar {
     transform-box: fill-box;
     animation: fl-bar var(--fl-loop-dur, 7s) ease-in-out infinite alternate both;
-    animation-delay: calc(var(--fl-loop-delay, 1.5s) + var(--bi, 0) * 80ms);
+    animation-delay: calc(var(--fl-loop-delay, 1.5s) + var(--bi, 0) * 50ms);
 }
 
 .fl-bar--up {
@@ -3284,7 +3279,8 @@ section[id] {
     color: var(--color-danger-icon);
 }
 
-/* disclosure (faq-item) — ใช้ทั้ง FAQ และกล่องพับ */
+/* disclosure (faq-item) — ใช้ทั้ง FAQ และกล่องพับ · ค่าตาม RoboLab .faq-item / .faq-question / .faq-arrow / .faq-answer-inner
+   เปิด/ปิดยืด-หด .35s ease (main.js) · FAQ เปิดได้ทีละข้อ */
 .disclosure {
     border: 1px solid var(--color-border);
     border-radius: var(--r-lg);
@@ -3293,7 +3289,7 @@ section[id] {
     transition: background var(--dur);
 }
 
-.disclosure[open] {
+.disclosure[open]:not(.is-closing) {
     background: linear-gradient(#fff, var(--color-roadmap-end));
 }
 
@@ -3306,7 +3302,8 @@ section[id] {
     gap: 16px;
     padding: 20px 24px;
     font-size: 20px;
-    line-height: 1.5;
+    font-weight: 400;
+    line-height: normal;
     transition: color var(--dur), background var(--dur);
 }
 
@@ -3319,23 +3316,28 @@ section[id] {
     background: linear-gradient(#fff, var(--color-roadmap-end));
 }
 
-.disclosure[open] summary {
+.disclosure[open]:not(.is-closing) summary {
     color: var(--color-primary);
 }
 
-.disclosure[open] summary:hover {
+.disclosure[open]:not(.is-closing) summary:hover {
     background: none;
 }
 
+/* ลูกศร: กล่อง 32×32 ไอคอน keyboard_arrow_down 20px หมุน 180° .25s (RoboLab .faq-arrow) */
 .disclosure summary .ms {
-    font-size: 22px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
     color: var(--color-text-primary);
     transition: transform .25s;
-    width: 32px;
-    text-align: center;
 }
 
-.disclosure[open] summary .ms {
+.disclosure[open]:not(.is-closing) summary .ms {
     transform: rotate(180deg);
 }
 
@@ -3970,9 +3972,9 @@ section[id] {
     white-space: nowrap;
     pointer-events: none;
     user-select: none;
-    font-size: 104px;
+    font-size: 100px; /* RoboLab .s6-watermark 100 · ≤1280 80 · ≤1024 64 · ≤900 48 */
     font-weight: 700;
-    line-height: 1.15;
+    line-height: 1.15; /* ของเรา 2 บรรทัด (RoboLab บรรทัดเดียว lh 1.4) */
     opacity: .26;
     background: linear-gradient(166deg, #609afa 0%, #003e7f00 100%);
     -webkit-background-clip: text;
@@ -4663,7 +4665,7 @@ section[id] {
 }
 
 /* ==========================================================================
-   Responsive — max-width: 1365 / 1280 / 1199 / 1099 / 1050 / 1024 / 991 / 960 / 900 / 767 / 575 / 480
+   Responsive — max-width: 1365 / 1280 / 1199 / 1099 / 1050 / 1024 / 991 / 960 / 900 / 767 / 575 / 480 / 390
    min-width = ค่า max ตัวบน + 1 (1200 / 1100 / 768 / 481) ไม่ให้จอใดเข้า 2 ฝั่งพร้อมกัน · ≥1800 ใช้เฉพาะหัวข้อเรียน
    ช่วงแท็บเล็ต: 768–1199 / 768–1099 / 768–991 · ช่วงอื่น: 481–991 / 481–767
    มือถือ = ≤767 (ตรงกับ main.js) · แท็บเล็ต = 768–1199 · เดสก์ท็อป = ≥1200 · ฐานจาก RoboLab (1280 / 1024 / 960 / 480)
@@ -4671,6 +4673,11 @@ section[id] {
 @media (max-width: 1280px) {
     .hero-inner {
         padding-top: 80px;
+    }
+
+    /* ผู้สอน: ขนาดตัวอักษรตาม RoboLab #instructor (.s6-*) */
+    .teacher-watermark {
+        font-size: 80px;
     }
 }
 
@@ -4756,7 +4763,6 @@ section[id] {
     .teacher-watermark {
         top: 0;
         left: 0;
-        font-size: 80px;
     }
 
     .teacher-glass {
@@ -4813,6 +4819,11 @@ section[id] {
 }
 
 @media (max-width: 1024px) {
+    /* ผู้สอน: ขนาดตัวอักษรตาม RoboLab #instructor (.s6-*) */
+    .teacher-watermark {
+        font-size: 64px;
+    }
+
     /* hero: เรียงคอลัมน์เดียว เนื้อหากลาง แล้วตามด้วยภาพผู้สอน */
     .hero-stage {
         grid-template-columns: minmax(0, 1fr);
@@ -4936,6 +4947,11 @@ section[id] {
     .tech-hold {
         display: none;
     }
+
+    /* แต่ละใบสูงตามเนื้อหา (จอใหญ่ใช้แถว 1fr ให้ 2 ใบสูงเท่ากันตอนซ้อน) */
+    .tech-stack {
+        grid-template-rows: none;
+    }
 }
 
 /* 481–991px — hero: ข้อมูลคอร์ส 4 ช่อง (ที่นั่ง · วันที่ · ระยะเวลา · ราคา) เรียงแถวละ 2
@@ -5033,9 +5049,9 @@ section[id] {
         min-width: 160px;
     }
 
-    body.has-bottom-bar {
+    /* body.has-bottom-bar {
         padding-bottom: 72px;
-    }
+    } */
 
     .back-top {
         bottom: 88px;
@@ -5045,6 +5061,23 @@ section[id] {
 @media (max-width: 900px) {
     .hero-inner {
         padding: 56px var(--spacing-sm) 0;
+    }
+
+    /* ผู้สอน: ขนาดตัวอักษรตาม RoboLab #instructor (.s6-*) */
+    .teacher-watermark {
+        font-size: 48px;
+    }
+
+    .teacher-name,
+    .teacher-name .l1 {
+        font-size: 28px;
+    }
+
+    /* ชื่อ + นามสกุลบรรทัดเดียวกัน ห่าง 8 (RoboLab ≤900: ซ่อน <br> + .s6-name-l1 margin-right 8)
+       HTML ไม่มีช่องว่างระหว่างชื่อ-นามสกุล (ช่องว่างสำหรับโปรแกรมอ่านจออยู่ใน .sr-only) จึงห่างเท่า margin พอดี */
+    .teacher-name .l1 {
+        display: inline;
+        margin-right: 8px;
     }
 
     .hero-title {
@@ -5082,11 +5115,12 @@ section[id] {
 
     /* ภาพกว้างกว่าจอ → จัดตัวโน้ตบุ๊ก (x .246–.9145W กลาง .58W) กลางจอแทนกล่องภาพ ไม่ให้ปลายฐานล้นขอบขวา */
     .curr-photo {
-        left: calc(50% - .58 * var(--curr-w));
+        left: calc(50% - .48 * var(--curr-w));
+        /* left: calc(50% - .58 * var(--curr-w)); */
     }
 
     .curr-foot {
-        padding: 32px 0 calc(var(--curr-w) * .4495 + 20px);
+        padding: 32px 0 calc(var(--curr-w) * .4495 + 32px);
     }
 
     .curr-note {
@@ -5233,10 +5267,16 @@ section[id] {
 
     .tech-card {
         padding: 24px 18px;
+        gap: 24px;
     }
 
     .tech-stack {
         gap: 20px;
+    }
+
+    .tech-body .result-row {
+        margin-top: 16px;
+        padding-top: 16px;
     }
 
     .fc-plot {
@@ -5252,6 +5292,7 @@ section[id] {
         width: 100%;
     }
 
+    /* ผู้สอน ≤767 (RoboLab ≤768): ชื่อ 28 (บรรทัดแรก 32) · ตำแหน่ง 15 · บทบาท/ประวัติ 14 · ลายน้ำ 48 */
     .teacher-name {
         font-size: 28px;
     }
@@ -5260,12 +5301,17 @@ section[id] {
         font-size: 32px;
     }
 
-    .teacher-subrole {
-        font-size: var(--text-md);
+    .teacher-role {
+        font-size: 15px;
+    }
+
+    .teacher-subrole,
+    .teacher-bio p {
+        font-size: 14px;
     }
 
     .teacher-watermark {
-        font-size: 64px;
+        font-size: 48px;
     }
 
     .finalcta-title {
@@ -5277,13 +5323,10 @@ section[id] {
         font-size: var(--text-md);
     }
 
+    /* accordion ตาม RoboLab ≤768: หัวข้อ 15px padding 16 · คำตอบคงเดิม (0 24 20 · 16px) */
     .disclosure summary {
-        font-size: var(--text-lg);
-        padding: 16px 18px;
-    }
-
-    .disclosure-body {
-        padding: 0 18px 18px;
+        font-size: 15px;
+        padding: 16px;
     }
 
     .guarantee-inner {
@@ -5307,7 +5350,7 @@ section[id] {
         grid-template-columns: 28px 1fr;
         column-gap: 12px;
         align-items: start;
-        padding: 12px 0;
+        padding: 16px 0;
     }
 
     .value-icon {
@@ -5323,9 +5366,8 @@ section[id] {
     .value-amt {
         grid-column: 2;
         padding-left: 0;
-        margin-top: 4px;
+        margin-top: 8px;
         text-align: left;
-        color: var(--color-primary);
     }
 
     .perk {
@@ -5404,7 +5446,7 @@ section[id] {
     }
 
     .hero-price b {
-        font-size: 32px;
+        font-size: 26px;
     }
 
     .logo-row {
@@ -5412,9 +5454,47 @@ section[id] {
         grid-template-columns: 1fr 1fr;
         gap: 16px;
     }
+
+    /* บรรทัดเน้นใหญ่ใต้หัวข้อ (ราคารวม · AI Agent ดูแลพอร์ต) */
+    .section-title .accent-lg {
+        font-size: 26px;
+    }
+
+    /* ผู้สอน + การรับประกัน ชิดกันเหมือน section เดียว: ระยะ 32 (เท่าช่องไฟในส่วนผู้สอน) แทน 112
+       พื้นไล่สีต่อกันอยู่แล้ว (ผู้สอนจบ #dff0ff = การรับประกันเริ่ม #dff0ff) */
+    #teacher {
+        padding-bottom: 0;
+    }
+
+    #support {
+        padding-top: 32px;
+    }
+
+    .plan-amount {
+        font-size: 32px;
+    }
+
+    .tech-body h3 {
+        font-size: 22px;
+    }
 }
 
 @media (max-width: 480px) {
+    /* ผู้สอน: ขนาดตัวอักษรตาม RoboLab #instructor (.s6-*) */
+    .teacher-name {
+        font-size: 24px;
+    }
+
+    .teacher-name .l1 {
+        font-size: 28px;
+    }
+
+    /* accordion ตาม RoboLab ≤480: หัวข้อ 14px padding 14/12 */
+    .disclosure summary {
+        font-size: 14px;
+        padding: 14px 12px;
+    }
+
     /* hero eyebrow: ย่อให้อยู่บรรทัดเดียว */
     .hero-eyebrow {
         gap: 4px 10px;
@@ -5447,16 +5527,17 @@ section[id] {
     }
 
     .hero-title {
-        font-size: 25px;
+        font-size: 24px;
     }
 
     .section-title {
-        font-size: 24px;
+        font-size: 22px;
     }
 
     /* ให้ title ส่วนใหญ่ยังเป็น 2 บรรทัดบนจอ 375px */
     .hero-desc {
         font-size: var(--text-md);
+        margin-top: -8px;
     }
 
     .hero-benefits {
@@ -5501,5 +5582,16 @@ section[id] {
 
     .fc-plot {
         height: 150px;
+    }
+}
+
+/* ≤390px — ผู้สอน: ชื่อ 22 (บรรทัดแรก 26) ตาม RoboLab .s6-name */
+@media (max-width: 390px) {
+    .teacher-name {
+        font-size: 22px;
+    }
+
+    .teacher-name .l1 {
+        font-size: 26px;
     }
 }
