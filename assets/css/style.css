@@ -3880,10 +3880,11 @@ section[id] {
     transition: transform .55s cubic-bezier(.2, .8, .2, 1) calc(var(--i) * 35ms);
 }
 
+/* กล่อง + ป้ายขึ้นธง: โผล่ต่อทันทีหลังแท่งสุดท้ายงอกเสร็จ (แท่งที่ 20 เริ่ม .665s + .55s = 1.215s) เห็นครบที่ 1.6s (เดิม 2.1s) */
 .js [data-chart] .fc-band,
 .js [data-chart] .fc-flag {
     opacity: 0;
-    transition: opacity .5s ease 1.6s;
+    transition: opacity .35s ease 1.25s;
 }
 
 .js [data-chart] .aw-seg {
@@ -4200,10 +4201,6 @@ section[id] {
     color: #dbe5f1;
 }
 
-.g-item--muted .ms {
-    color: var(--color-on-dark-muted);
-}
-
 /* เฟรมภาพใต้ list: แสดงทุกจอ · สูงอย่างน้อย 160 · ตอนเปิดเงื่อนไขทั้งหมด (ค่าเริ่มต้น) ยืดเติมที่ว่างจนสูงเท่าการ์ดขาว
    จอ ≥768 (วางซ้ายขวา): หุบเงื่อนไข = ซ่อนภาพ (การ์ดเตี้ยลง ไม่มีที่ว่างให้เติม) · ≤767 (คอลัมน์เดียว) แสดงตลอด */
 .guarantee-media {
@@ -4278,7 +4275,7 @@ section[id] {
 }
 
 .clinic-points .ms {
-    color: var(--color-primary);
+    color: var(--color-success-green); /* check เส้นเปล่าสีเขียว ไม่มีวงกลม (แบบเดียวกับ "เหมาะกับ") */
     font-size: 20px;
 }
 
