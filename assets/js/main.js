@@ -37,6 +37,38 @@
     if (a) e.preventDefault();
   });
 
+  /* ---------- วัดผล: dataLayer event สำหรับ GTM / GA4 (เอกสารข้อ 4.1) ----------
+     - view_item ตอนเปิดหน้า · select_item ตอนกดปุ่ม "จองที่นั่ง" ทั้ง 5 ปุ่ม ([data-book] = button_location)
+     - ห้ามส่งชื่อ อีเมล เบอร์โทร หรือเลขผู้เสียภาษีของผู้ซื้อเข้า dataLayer
+     - ครบ 10 ที่นั่งแล้ว: เปลี่ยน item_variant เป็น 'ราคาปกติ' และ price เป็น 9000
+     - แท็กปุ่ม [data-gtm] (cta_click + button_name) ตั้งใน GTM เอง ไม่ได้ส่งจากสคริปต์นี้ */
+  var courseItem = {
+    item_id: 'ai-portfolio-watch-dec2026',
+    item_name: 'คอร์ส AI เฝ้าพอร์ต: สร้างผู้ช่วยลงทุนส่วนตัวใน 2 วัน',
+    item_category: 'efincourse',
+    item_variant: 'Early Bird',
+    price: 7900,
+    quantity: 1
+  };
+  var dataLayer = (window.dataLayer = window.dataLayer || []);
+
+  dataLayer.push({ ecommerce: null });
+  dataLayer.push({
+    event: 'view_item',
+    ecommerce: { currency: 'THB', value: courseItem.price, items: [courseItem] }
+  });
+
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[data-book]');
+    if (!a) return;
+    dataLayer.push({ ecommerce: null });
+    dataLayer.push({
+      event: 'select_item',
+      button_location: a.getAttribute('data-book'),
+      ecommerce: { items: [courseItem] }
+    });
+  });
+
   /* ---------- Reveal on scroll ([data-anim]) ---------- */
   var animEls = document.querySelectorAll('[data-anim]');
   if ('IntersectionObserver' in window) {

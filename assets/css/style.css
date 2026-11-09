@@ -312,6 +312,14 @@ section[id] {
 }
 
 /* soft = พื้นขาว ตัวน้ำเงินหนา เส้นขอบฟ้าอ่อน */
+
+/* ขนาด: .tag ค่าเริ่ม = sm (12px · padding 2/8 · สูง 22) ใช้กับ Early Bird / โบนัส
+   .tag--base = ขนาดปกติ (16px --text-md · padding 4/16 · สูง 32) ใช้กับ badge ชื่อคอร์สใน hero */
+.tag--base {
+    padding: 4px 16px;
+    font-size: var(--text-md);
+}
+
 .tag--warn {
     background: var(--color-warning-bg);
     color: #b26b00;
@@ -1261,7 +1269,7 @@ section[id] {
     }
 }
 
-/* ≤575: ไม่มีการ์ดลอย (แคบเกิน การ์ดไปทับป้ายหัวข้อ/หัวข้อ) */
+/* ≤575: ไม่มีการ์ดลอย (จอแคบเกิน) */
 @media (max-width: 575px) {
     .hero > .hero-floats {
         display: none;
@@ -1806,31 +1814,10 @@ section[id] {
 }
 
 /* eyebrow เหนือหัวข้อ hero (ผู้ใช้ขอเฉพาะจุดนี้) · สองโทน: ชื่อคอร์สน้ำเงินหนา | คำอธิบายสีรอง คั่นด้วยเส้นสั้นแบบการ์ดขาว */
+/* badge ชื่อคอร์ส: ใช้ .tag .tag--soft ชุดเดียวกับ Early Bird / โบนัส (หน้าตาทั้งหมดมาจาก .tag) · ที่นี่แค่จัดวาง */
 .hero-eyebrow {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 4px 12px;
+    align-self: center; /* .tag ตั้งค่าเริ่ม flex-start */
     margin-bottom: -4px; /* ห่างหัวข้อ 24px (gap 28 − 4) */
-    font-size: var(--text-md);
-    line-height: 1.5;
-}
-
-.hero-eyebrow b {
-    font-weight: 700;
-    color: var(--color-primary);
-}
-
-.hero-eyebrow span {
-    font-weight: 500;
-    color: var(--color-text-secondary);
-}
-
-.hero-eyebrow-sep {
-    width: 1px;
-    height: 18px;
-    background: #bfd7fe;
 }
 
 .hero-title {
@@ -5019,7 +5006,8 @@ section[id] {
         align-items: center;
         justify-content: space-between;
         gap: 12px;
-        padding: 10px 16px 14px;
+        /* ขอบล่างบวกพื้นที่ home indicator ของ iPhone (ต้องมี viewport-fit=cover ใน meta viewport) */
+        padding: 10px 16px calc(14px + env(safe-area-inset-bottom, 0px));
         background: #fffffff2;
         -webkit-backdrop-filter: blur(16px);
         backdrop-filter: blur(16px);
@@ -5046,11 +5034,14 @@ section[id] {
         min-width: 160px;
     }
 
-    /* body.has-bottom-bar {
-        padding-bottom: 72px;
-    } */
+    body.has-bottom-bar {
+        padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    }
 
-    /* ไม่มีแถบจองด้านล่างแล้ว → ปุ่มกลับขึ้นบนใช้ตำแหน่งเดียวกับจอใหญ่ (ขวา 24 ล่าง 32) แทนการยกขึ้นเหนือแถบ (เดิม 88) */
+    /* ปุ่มกลับขึ้นบนยกขึ้นเหนือแถบจอง */
+    .back-top {
+        bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+    }
 }
 
 @media (max-width: 900px) {
@@ -5429,9 +5420,11 @@ section[id] {
     }
 }
 
-/* ≤575px — hero: ตัด padding ซ้ายขวาของ .hero-inner (เดิม 16 จาก ≤900) ให้เนื้อหากว้างเต็ม container */
+/* ≤575px — hero: ตัด padding ซ้ายขวาของ .hero-inner (เดิม 16 จาก ≤900) ให้เนื้อหากว้างเต็ม container
+   padding บน 80 เท่าจอ 991px (ค่าจาก ≤1280) */
 @media (max-width: 575px) {
     .hero-inner {
+        padding-top: 80px;
         padding-left: 0;
         padding-right: 0;
     }
@@ -5488,16 +5481,6 @@ section[id] {
     .disclosure summary {
         font-size: 14px;
         padding: 14px 12px;
-    }
-
-    /* hero eyebrow: ย่อให้อยู่บรรทัดเดียว */
-    .hero-eyebrow {
-        gap: 4px 10px;
-        font-size: 13px;
-    }
-
-    .hero-eyebrow-sep {
-        height: 14px;
     }
 
     .hero {
