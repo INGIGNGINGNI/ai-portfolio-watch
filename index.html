@@ -44,7 +44,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" />
     <!-- ฟอนต์ไอคอน: โหลดเฉพาะ 46 ไอคอนที่ใช้ในหน้า (icon_names เรียงตามตัวอักษร) ~10 KB แทนชุดเต็ม ~540 KB
          เพิ่มไอคอนใหม่ในหน้าเมื่อไร ต้องเพิ่มชื่อในรายการนี้ด้วย ไม่งั้นจะแสดงเป็นตัวหนังสือ -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&icon_names=account_tree,arrow_upward,balance,bolt,build,candlestick_chart,check,check_circle,close,co_present,copyright,currency_exchange,database,directions_car,event,event_repeat,event_seat,flag,gpp_maybe,handyman,history,home,hub,info,key,keyboard_arrow_down,laptop_mac,location_on,menu_book,monitoring,neurology,play_arrow,query_stats,restaurant,rule,schedule,send,sentiment_dissatisfied,sentiment_satisfied,smart_display,smart_toy,support_agent,timer,train,widgets,zoom_in&display=block" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&icon_names=account_tree,arrow_upward,balance,bolt,build,candlestick_chart,check,check_circle,close,co_present,copyright,currency_exchange,database,directions_car,event,event_repeat,event_seat,flag,gpp_maybe,handyman,history,home,hub,info,key,keyboard_arrow_down,laptop_mac,location_on,menu_book,monitoring,neurology,play_arrow,query_stats,restaurant,rule,schedule,send,sentiment_dissatisfied,sentiment_satisfied,smart_display,smart_toy,support_agent,train,widgets,zoom_in&display=block" />
     <link rel="stylesheet" href="assets/css/tokens.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
     <script>
@@ -216,8 +216,8 @@
             <nav class="nav-links" aria-label="เมนูหน้า">
                 <a href="#price" data-gtm="cta_aipw_nav_price">ราคา</a>
                 <a href="#curriculum" data-gtm="cta_aipw_nav_curriculum">หัวข้อเรียน</a>
-                <a href="#teacher" data-gtm="cta_aipw_nav_teacher">ผู้สอน</a>
                 <a href="#fit" data-gtm="cta_aipw_nav_fit">เหมาะกับใคร</a>
+                <a href="#teacher" data-gtm="cta_aipw_nav_teacher">ผู้สอน</a>
                 <a href="#faq" data-gtm="cta_aipw_nav_faq">คำถาม</a>
                 <a href="#" data-link="pending" data-gtm="cta_aipw_nav_replay">ดูย้อนหลัง</a>
             </nav>
@@ -234,8 +234,8 @@
     <div id="mobile-nav" class="mobile-nav">
         <a href="#price" data-gtm="cta_aipw_nav_price">ราคา</a>
         <a href="#curriculum" data-gtm="cta_aipw_nav_curriculum">หัวข้อเรียน</a>
-        <a href="#teacher" data-gtm="cta_aipw_nav_teacher">ผู้สอน</a>
         <a href="#fit" data-gtm="cta_aipw_nav_fit">เหมาะกับใคร</a>
+        <a href="#teacher" data-gtm="cta_aipw_nav_teacher">ผู้สอน</a>
         <a href="#faq" data-gtm="cta_aipw_nav_faq">คำถาม</a>
         <a href="#" data-link="pending" data-gtm="cta_aipw_nav_replay">ดูย้อนหลัง</a>
     </div>
@@ -245,7 +245,7 @@
             <!-- ตารางช่องเล็ก + ช่องไอคอน/โลโก้ (แนว cryps.framer.website)
                  ช่องไอคอน (Lucide · .hg-ico): --c = คอลัมน์นับจากกลางจอ (0 = ช่องกลาง) · --r = แถวจากขอบบน hero
                  ช่องโลโก้เครื่องมือ (.hg-edge): --e = ช่องที่เท่าไรนับจากขอบจอ (0 = ช่องเต็มช่องแรก) · .hg-l ซ้าย / .hg-r ขวา
-                 hg-d = จอ ≥1200 · hg-t = 768–1199 · hg-m = ≤767 · hg-mt = ≤1199 (ทั้งแท็บเล็ตและมือถือ) -->
+                 hg-d = จอ ≥1200 · hg-t = 768–1199 · hg-m = ≤767 -->
             <div class="hero-grid" aria-hidden="true">
                 <i class="hg-beam hg-beam--l"></i>
                 <i class="hg-beam hg-beam--r"></i>
@@ -276,17 +276,20 @@
                 <span class="hg-cell hg-t" style="--c:3;--r:2"><span class="hg-ico hg-ico--bot"></span></span>
                 <span class="hg-cell hg-t" style="--c:-5;--r:3"><span class="hg-ico hg-ico--bell"></span></span>
                 <span class="hg-cell hg-t" style="--c:5;--r:3"><span class="hg-ico hg-ico--sparkles"></span></span>
-                <!-- ≤767: ไอคอน 6 ช่อง main.js (heroGridMobile) จัดตำแหน่งให้กระจายในที่ว่างของ hero ตามความกว้างจอจริง
-                     (ไม่ทับข้อความ/กล่อง · ไม่ติดกัน · กระจายห่างกันมากที่สุด) · ค่า --c/--r ด้านล่างเป็นตำแหน่งสำรองตอนไม่มี JS -->
-                <span class="hg-cell hg-m" style="--c:-1;--r:2"><span class="hg-ico hg-ico--candlestick"></span></span>
+                <!-- ≤767: ตำแหน่งตามที่ผู้ใช้กำหนด (กรอบแดงบนจอ 375) · .hg-x = ช่องริมจอ (ช่องที่เห็นครึ่งช่องขึ้นไป อาจเลยขอบจอได้)
+                     ซ้าย: n8n แถว 4 · pie แถว 10 (เกยมุมการ์ดราคา) / ขวา: Telegram แถว 2 · sparkles แถว 5 · bell แถว 9
+                     กลาง: candlestick c −2 แถว 1 (โผล่ใต้เมนู) · bot c 1 แถว 2
+                     ข้อความตัดบรรทัดต่างกันตามความกว้างจอ → main.js (heroGridMobile) ขยับแถวแต่ละช่องไปแถวใกล้สุดที่ไม่ทับข้อความ/ป้าย ไม่ติดกัน (data-over="card" = เกยการ์ดได้) -->
+                <span class="hg-cell hg-m" style="--c:-2;--r:1"><span class="hg-ico hg-ico--candlestick"></span></span>
                 <span class="hg-cell hg-m" style="--c:1;--r:2"><span class="hg-ico hg-ico--bot"></span></span>
-                <span class="hg-cell hg-m" style="--c:-3;--r:4"><span class="hg-ico hg-ico--bell"></span></span>
-                <span class="hg-cell hg-m" style="--c:3;--r:4"><span class="hg-ico hg-ico--pie"></span></span>
-                <span class="hg-cell hg-m hg-m--js" style="--c:-3;--r:4"><span class="hg-ico hg-ico--sparkles"></span></span>
-                <span class="hg-cell hg-m hg-m--js" style="--c:3;--r:4"><span class="hg-ico hg-ico--exchange"></span></span>
-                <!-- ≤1199: โลโก้ n8n ซ้าย / Telegram ขวา ชิดขอบ แถว 2 -->
-                <span class="hg-cell hg-edge hg-l hg-mt" style="--e:0;--r:2"><span class="hg-logo hg-logo--n8n"></span></span>
-                <span class="hg-cell hg-edge hg-r hg-mt" style="--e:0;--r:2"><span class="hg-logo hg-logo--telegram"></span></span>
+                <span class="hg-cell hg-m hg-x hg-r" style="--r:2"><span class="hg-logo hg-logo--telegram"></span></span>
+                <span class="hg-cell hg-m hg-x hg-l" style="--r:4"><span class="hg-logo hg-logo--n8n"></span></span>
+                <span class="hg-cell hg-m hg-x hg-r" style="--r:5"><span class="hg-ico hg-ico--sparkles"></span></span>
+                <span class="hg-cell hg-m hg-x hg-r" style="--r:9"><span class="hg-ico hg-ico--bell"></span></span>
+                <span class="hg-cell hg-m hg-x hg-l" style="--r:10" data-over="card"><span class="hg-ico hg-ico--pie"></span></span>
+                <!-- 768–1199: โลโก้ n8n ซ้าย / Telegram ขวา ชิดขอบ แถว 2 -->
+                <span class="hg-cell hg-edge hg-l hg-t" style="--e:0;--r:2"><span class="hg-logo hg-logo--n8n"></span></span>
+                <span class="hg-cell hg-edge hg-r hg-t" style="--e:0;--r:2"><span class="hg-logo hg-logo--telegram"></span></span>
             </div>
             <!-- การ์ดลอยรอบเนื้อหา (.hero-floats) ถอดออกแล้ว · CSS (.fl*) และ JS (heroFloatsParallax) ยังอยู่ ใส่ markup กลับจาก git commit b2900d3 เมื่อจะใช้ -->
             <div class="hero-stage">
@@ -353,11 +356,6 @@
                             <img alt="" loading="lazy" width="26" height="26" decoding="async"
                                 src="assets/logos/claude.svg" />
                             <span class="logo-word">Claude</span>
-                        </li>
-                        <li class="logo-item">
-                            <img alt="Settrade Open API" loading="lazy" width="108" height="24" decoding="async"
-                                src="assets/logos/settrade.svg" />
-                            <span class="logo-suffix">Open API</span>
                         </li>
                     </ul>
                 </div>
@@ -582,7 +580,7 @@
                         <h3 class="gate-title">พอร์ตลงทุนตั้งแต่ 1 ล้านบาทขึ้นไป</h3>
                         <p class="gate-desc">ค่าใช้จ่ายระบบหลังเรียนไม่ควรเกิน 1.50% ของพอร์ตต่อปี พอร์ตที่เล็กกว่านี้จะมีต้นทุนระบบสูงเมื่อเทียบกับประโยชน์ที่ได้</p>
                         <div class="gate-foot">
-                            <p class="gate-figure" aria-hidden="true"><b>฿1M</b><small>พอร์ตขั้นต่ำ</small></p>
+                            <p class="gate-figure" aria-hidden="true"><b>1M</b><small>พอร์ตขั้นต่ำ</small></p>
                         </div>
                     </article>
                     <span class="gate-plus" aria-hidden="true">+</span>
@@ -618,7 +616,7 @@
                         </ul>
                     </div>
                 </div>
-                <!-- สิ่งที่ต้องเตรียมมาเรียน: ข้อความตาม wireframe ครบทุกรายการ · ชิปมีไอคอนนำหน้า -->
+                <!-- สิ่งที่ต้องเตรียมมาเรียน: ข้อความตาม wireframe ครบทุกรายการ · การ์ด 6 ใบ ไอคอนอยู่บน -->
                 <div class="prep" data-anim="fade-up">
                     <p class="prep-sum">
                         <b>สิ่งที่ต้องเตรียมมาเรียน</b>
@@ -816,7 +814,7 @@
                         <p class="teacher-role">Head of Investment Analytics &amp; Innovation</p>
                         <p class="teacher-subrole">นักลงทุน · นักเขียน · ผู้เชี่ยวชาญด้านการลงทุน Hybrid Trade มากกว่า 20 ปี</p>
                         <div class="teacher-bio">
-                            <p>หนึ่งในผู้ร่วมก่อตั้งและกำลังหลักของ efinanceThai สื่อและแพลตฟอร์มวิเคราะห์ข้อมูลหุ้นชั้นนำของไทย เป็นผู้อยู่เบื้องหลังเครื่องมือช่วยลงทุนที่นักลงทุนไทยใช้จริง และเชี่ยวชาญการลงทุนแบบ Hybrid Trade มากกว่า 20 ปี</p>
+                            <p>หนึ่งในผู้ร่วมก่อตั้งและกำลังหลักของ efinanceThai สื่อและแพลตฟอร์มวิเคราะห์ข้อมูลหุ้นไทย เป็นผู้อยู่เบื้องหลังเครื่องมือช่วยลงทุนที่นักลงทุนไทยใช้จริง และเชี่ยวชาญการลงทุนแบบ Hybrid Trade มากกว่า 20 ปี</p>
                         </div>
                     </div>
                     <div class="teacher-glass" data-anim="fade-up">
@@ -835,7 +833,7 @@
                                     <span class="ms" aria-hidden="true">co_present</span>
                                     <div>
                                         <b>วิทยากรรับเชิญ</b>
-                                        <p>ตลาดหลักทรัพย์แห่งประเทศไทย (SET) และบริษัทหลักทรัพย์ชั้นนำ</p>
+                                        <p>ตลาดหลักทรัพย์แห่งประเทศไทย (SET) และบริษัทหลักทรัพย์</p>
                                     </div>
                                 </div>
                             </li>
@@ -867,8 +865,7 @@
                 <div class="guarantee-card" data-anim="fade-up">
                     <div class="guarantee-inner">
                         <div class="guarantee-left">
-                            <h2 class="guarantee-title">การดูแลหลังเรียน 30 วัน<span class="line">และการรับประกัน</span>
-                            </h2>
+                            <h2 class="guarantee-title">การดูแลหลังเรียน 30 วัน</h2>
                             <p class="guarantee-sub">แต่ไม่รับประกันผลตอบแทนการลงทุน เพราะการตัดสินใจลงทุนเป็นของคุณเสมอ
                             </p>
                             <ul class="guarantee-list">
@@ -876,21 +873,21 @@
                                     <span class="ms" aria-hidden="true">support_agent</span>
                                     <div>
                                         <b>ระบบใช้งานได้ภายใน 30 วัน</b>
-                                        <span>ถ้าบอทยังส่งสรุปหุ้นเข้า Telegram ของคุณไม่ได้<br />เราดูแลผ่าน Fix-it Clinic และกลุ่มถาม-ตอบจนกว่าจะใช้ได้</span>
+                                        <span>ถ้าบอทยังส่งสรุปหุ้นเข้า Telegram <span class="nobr">ของคุณไม่ได้</span><br />เราดูแลผ่าน <span class="nobr">Fix-it Clinic</span> และ<span class="nobr">กลุ่มถาม-ตอบ</span><span class="nobr">จนกว่าจะใช้ได้</span></span>
                                     </div>
                                 </li>
                                 <li class="g-item">
                                     <span class="ms" aria-hidden="true">event_repeat</span>
                                     <div>
                                         <b>ครบ 30 วันแล้วยังใช้ไม่ได้</b>
-                                        <span>กรณีเข้าเรียนครบและทำการบ้านแล้ว เรานัดแก้ตัวต่อตัวเพิ่มให้ 1 ครั้ง</span>
+                                        <span>กรณีเข้าเรียนครบและทำการบ้านแล้ว <span class="nobr">เรานัดแก้ตัวต่อตัวเพิ่มให้ 1 ครั้ง</span></span>
                                     </div>
                                 </li>
                                 <li class="g-item">
                                     <span class="ms" aria-hidden="true">gpp_maybe</span>
                                     <div>
                                         <b>ไม่รับประกันผลตอบแทนการลงทุน</b>
-                                        <span>ระบบช่วยติดตามและรักษาวินัย การตัดสินใจลงทุนเป็นของคุณเสมอ</span>
+                                        <span>ระบบช่วยติดตามและรักษาวินัย <span class="nobr">การตัดสินใจลงทุนเป็นของคุณเสมอ</span></span>
                                     </div>
                                 </li>
                             </ul>
@@ -1123,34 +1120,6 @@
                 </h2>
                 <p class="finalcta-sub" data-anim="fade-up">วันที่ 14–15 ธันวาคม 2569 รับเพียง 25 ที่นั่ง<span
                         class="line">ราคา Early Bird 7,900 ฿ (สำหรับ 10 ที่นั่งแรกเท่านั้น)</span></p>
-                <div data-anim="fade-up">
-                    <span class="cd-label grad-text">
-                        <span class="ms" aria-hidden="true">timer</span>
-                        นับถอยหลังสู่วันเรียน
-                    </span>
-                    <div class="cd-row" role="timer" aria-label="เวลาที่เหลือก่อนวันเรียน"
-                        data-countdown="2026-12-14T10:00:00+07:00">
-                        <div class="cd-box">
-                            <span class="cd-num">--</span>
-                            <span class="cd-lbl">วัน</span>
-                        </div>
-                        <span class="cd-sep" aria-hidden="true">:</span>
-                        <div class="cd-box">
-                            <span class="cd-num">--</span>
-                            <span class="cd-lbl">ชม.</span>
-                        </div>
-                        <span class="cd-sep" aria-hidden="true">:</span>
-                        <div class="cd-box">
-                            <span class="cd-num">--</span>
-                            <span class="cd-lbl">นาที</span>
-                        </div>
-                        <span class="cd-sep" aria-hidden="true">:</span>
-                        <div class="cd-box">
-                            <span class="cd-num">--</span>
-                            <span class="cd-lbl">วินาที</span>
-                        </div>
-                    </div>
-                </div>
                 <div class="finalcta-btns" data-anim="fade-up">
                     <a class="btn btn--primary btn--lg" href="https://www.efin.finance/th/efincourse/ai-portfolio-watch-dec2026/payment" data-gtm="cta_aipw_closing_book" data-book="closing">
                         จองที่นั่ง 7,900 ฿

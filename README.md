@@ -8,7 +8,7 @@
 └── assets/
     ├── css/tokens.css     design tokens (สี ฟอนต์ ระยะ radius shadow gradient) — ใช้ร่วมกับเว็บ efin อื่นได้
     ├── css/style.css      คอมโพเนนต์ + responsive (โหลดหลัง tokens.css เสมอ)
-    ├── js/main.js         navbar, เมนูมือถือ, animation ตอนเลื่อน, จุดลอยพื้นหลัง hero, ปุ่มขึ้นบน, countdown, ลิงก์ที่ยังไม่มีปลายทาง, dataLayer event, จัดตำแหน่งตารางไอคอน hero มือถือ
+    ├── js/main.js         navbar, เมนูมือถือ, animation ตอนเลื่อน, จุดลอยพื้นหลัง hero, ปุ่มขึ้นบน, ลิงก์ที่ยังไม่มีปลายทาง, dataLayer event, จัดตำแหน่งตารางไอคอน hero มือถือ
     ├── images/            รูปจาก RoboLab (โลโก้ efin, รูปผู้สอนแบบไดคัต, texture) + แผนที่
     ├── logos/             โลโก้เครื่องมือใต้ hero
     ├── icons/lucide/      ไอคอน Lucide 8 ตัวในตาราง hero (SVG)
@@ -32,9 +32,8 @@ python3 -m http.server 4317
   ครบ 10 ที่นั่งแล้วต้องแก้ `courseItem` เป็น `item_variant: 'ราคาปกติ'`, `price: 9000`
 - **แท็กปุ่ม `data-gtm`** 12 ชื่อตามเอกสาร (`cta_aipw_*`) ลิงก์ในเมนูมือถือใช้ชื่อเดียวกับเมนูบน (รวม 18 จุด) ต้องตั้ง trigger ใน GTM ให้ส่ง event `cta_click` + `button_name` เอง สคริปต์ในหน้าไม่ได้ส่ง
 - ข้อความทั้งหมดแก้ใน `index.html` โดยตรง
-- ฟอนต์ (Noto Sans Thai, Inter, Material Symbols Rounded) โหลดจาก Google Fonts · ไอคอนโหลดเฉพาะ 46 ตัวที่ใช้ (`icon_names` ใน `<head>`) ใส่ไอคอนใหม่ต้องเพิ่มชื่อในรายการนั้นด้วย เรียงตามตัวอักษร
+- ฟอนต์ (Noto Sans Thai, Inter, Material Symbols Rounded) โหลดจาก Google Fonts · ไอคอนโหลดเฉพาะ 45 ตัวที่ใช้ (`icon_names` ใน `<head>`) ใส่ไอคอนใหม่ต้องเพิ่มชื่อในรายการนั้นด้วย เรียงตามตัวอักษร
 - ไอคอนในตาราง hero ใช้ Lucide (`assets/icons/lucide/*.svg` จาก lucide-static 1.70.0 · ISC) ระบายสีด้วย CSS mask · เพิ่มไอคอน: ดาวน์โหลดไฟล์จาก lucide.dev ใส่โฟลเดอร์นี้ แล้วเพิ่มคลาส `.hg-ico--ชื่อ` ใน style.css
 - Animation: ใส่ `data-anim="fade-up | fade-left | fade-right"` ที่ element ไหนก็ได้
-- Countdown: `<div class="cd-row" data-countdown="2026-12-14T10:00:00+07:00">`
 - ข้อมูล SEO (meta, Open Graph, JSON-LD Course + FAQPage) อยู่ใน `<head>` / ต้น `<body>` ของ `index.html`
-- โลโก้เครื่องมือ: n8n จาก repo ทางการ `n8n-io/n8n` (โลโก้ชุดปัจจุบันบน n8n.io), Settrade จาก settrade.com (ตัดบรรทัด www ออก), Telegram / ChatGPT (OpenAI) / Claude จาก Simple Icons ใส่สีตามแบรนด์
+- โลโก้เครื่องมือ: n8n จาก repo ทางการ `n8n-io/n8n` (โลโก้ชุดปัจจุบันบน n8n.io), Telegram / ChatGPT (OpenAI) / Claude จาก Simple Icons ใส่สีตามแบรนด์

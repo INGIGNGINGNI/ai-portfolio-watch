@@ -265,19 +265,21 @@
     update();
   })();
 
-  /* ---------- Hero grid มือถือ (≤767): กระจายช่องไอคอนในที่ว่างจริงของ hero ----------
-     จอแคบข้อความกว้างเกือบเต็มจอ และตำแหน่งตัดบรรทัดเปลี่ยนตามความกว้าง → ตั้งตำแหน่งตายตัวไม่ได้
-     วิธี: หาช่องตารางที่ไม่ทับข้อความ/กล่อง (ขยายขอบกัน 8px) ในแถว 2 ถึงแถวที่ mask ยังเห็นชัด (~73% ความสูง hero)
-     แล้วเลือกทีละช่องแบบ "ไกลจากช่องที่เลือกแล้วมากที่สุด" (เริ่มจากโลโก้ 2 ช่องที่ชิดขอบแถว 2)
-     ทุกช่องห่างกันอย่างน้อย 1 ช่องรอบด้าน (รวมแนวทแยง) และระยะรวม ≥3 ช่อง ไม่ให้กระจุก · ที่ไม่พอก็ใส่น้อยลง
-     คำนวณใหม่เมื่อฟอนต์โหลด / เปลี่ยนขนาดจอ */
+  /* ---------- Hero grid มือถือ (≤767): ช่องไอคอนขยับแถวหลบข้อความ ----------
+     ตำแหน่งตั้งต้น (--r ใน HTML) ผู้ใช้กำหนดจากจอ 375 · คอลัมน์คงที่ (ริมจอ .hg-x หรือ --c) ขยับเฉพาะแถว
+     ข้อความตัดบรรทัดต่างกันตามความกว้างจอ → หาแถวใกล้ตำแหน่งตั้งต้นที่สุด (0, +1, −1, +2, −2, +3, −3)
+     ที่ไม่ทับข้อความ / ป้ายชื่อคอร์ส (ขยายขอบ 4px) / การ์ด และไม่ติดช่องอื่น (รวมแนวทแยง)
+     ปลายบรรทัดข้อความเกยขอบช่องได้ไม่เกิน 8px (ช่องริมจอบางความกว้างเกยปลายบรรทัดที่เต็มความกว้างนิดเดียว)
+     data-over="card" = เกยการ์ดราคาได้ (มุมการ์ดตามแบบ) · หาไม่ได้ก็ซ่อน
+     คำนวณใหม่เมื่อฟอนต์โหลด / เปลี่ยนขนาดจอ · ไม่มี JS ใช้ --r เดิม */
   (function heroGridMobile() {
     var grid = document.querySelector('.hero-grid');
     if (!grid || !window.matchMedia) return;
     var hero = grid.parentElement;
     var mq = window.matchMedia('(max-width: 767px)');
-    var cells = Array.prototype.slice.call(grid.querySelectorAll('.hg-m'));
-    if (!cells.length) return;
+    var edge = Array.prototype.slice.call(grid.querySelectorAll('.hg-m'));
+    if (!edge.length) return;
+    edge.forEach(function (el) { el.dataset.r0 = el.style.getPropertyValue('--r'); });
 
     /* ระยะ translateY ที่ animation ตอนเลื่อนเข้า ([data-anim]) ยังค้างอยู่ — หักออกให้ได้ตำแหน่งจริง */
     function animShift(el) {
@@ -289,72 +291,53 @@
       return v ? parseFloat(v[1].split(',')[5]) || 0 : 0;
     }
 
-    function obstacles(top0) {
-      var rects = [];
-      function push(r, dy) {
-        if (r.width && r.height) rects.push({ l: r.left - 8, r: r.right + 8, t: r.top - dy - top0 - 8, b: r.bottom - dy - top0 + 8 });
-      }
-      hero.querySelectorAll('.hero-title, .hero-desc, .hero-trust').forEach(function (el) {
+    function rectOf(r, dy, top0, pad) {
+      return { l: r.left - pad, r: r.right + pad, t: r.top - dy - top0 - pad, b: r.bottom - dy - top0 + pad };
+    }
+
+    function layout() {
+      if (!mq.matches) return;
+      var cell = parseFloat(getComputedStyle(grid).getPropertyValue('--cell')) || 44;
+      var top0 = hero.getBoundingClientRect().top;
+      var text = [], badge = [], card = [];
+      hero.querySelectorAll('.hero-title, .hero-desc').forEach(function (el) {
         var dy = animShift(el);
         var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n;
         while ((n = w.nextNode())) {
           if (!n.textContent.trim()) continue;
           var rg = document.createRange();
           rg.selectNodeContents(n);
-          Array.prototype.forEach.call(rg.getClientRects(), function (r) { push(r, dy); });
+          Array.prototype.forEach.call(rg.getClientRects(), function (r) { text.push(rectOf(r, dy, top0, 0)); });
         }
       });
-      hero.querySelectorAll('.hero-eyebrow, .hero-offer, .hero-cta .btn, .trust-avatar, .hero-strip').forEach(function (el) {
-        push(el.getBoundingClientRect(), animShift(el));
-      });
-      return rects;
-    }
-
-    function layout() {
-      if (!mq.matches) return;
-      var cell = parseFloat(getComputedStyle(grid).getPropertyValue('--cell')) || 40;
-      var box = grid.getBoundingClientRect();
-      var W = grid.clientWidth, H = hero.offsetHeight;
-      var top0 = hero.getBoundingClientRect().top;
-      var obs = obstacles(top0);
-      var x0 = W / 2 - cell / 2;                     /* ขอบซ้ายช่อง c = 0 */
-      var cMin = Math.ceil(-x0 / cell), cMax = Math.floor((W - x0 - cell) / cell);
-      var rMax = Math.floor((H * 0.73) / cell) - 1;
-      var free = [];
-      for (var r = 2; r <= rMax; r++) {
-        for (var c = cMin; c <= cMax; c++) {
-          var L = box.left + x0 + c * cell, R = L + cell, T = r * cell, B = T + cell;
-          var hit = obs.some(function (o) { return Math.min(R, o.r) > Math.max(L, o.l) && Math.min(B, o.b) > Math.max(T, o.t); });
-          if (!hit) free.push({ c: c, r: r });
-        }
+      hero.querySelectorAll('.hero-eyebrow').forEach(function (el) { badge.push(rectOf(el.getBoundingClientRect(), animShift(el), top0, 4)); });
+      hero.querySelectorAll('.hero-offer, .hero-cta, .hero-trust').forEach(function (el) { card.push(rectOf(el.getBoundingClientRect(), animShift(el), top0, 0)); });
+      /* slack = ระยะเกยแนวนอนที่ยอมได้ */
+      function hits(list, c, slack) {
+        return list.some(function (o) { return Math.min(c.r, o.r) - Math.max(c.l, o.l) > slack && Math.min(c.b, o.b) > Math.max(c.t, o.t); });
       }
-      /* จุดเริ่ม: โลโก้ 2 ช่อง (แถว 2 ชิดขอบ) */
-      var chosen = [{ c: cMin, r: 2 }, { c: cMax, r: 2 }];
-      var picks = [];
-      cells.forEach(function () {
-        var best = null, bestD = -1;
-        free.forEach(function (p) {
-          var d = Infinity;
-          chosen.forEach(function (q) {
-            var dc = Math.abs(p.c - q.c), dr = Math.abs(p.r - q.r);
-            if (dc < 2 && dr < 2) d = -1;            /* ติดกัน → ใช้ไม่ได้ */
-            else d = Math.min(d, Math.sqrt(dc * dc + dr * dr * 1.4));
-          });
-          if (d > bestD) { bestD = d; best = p; }
+      var taken = [];
+      function touches(c) {
+        return taken.some(function (o) {
+          return Math.max(c.l, o.l) - Math.min(c.r, o.r) < cell * .9 && Math.max(c.t, o.t) - Math.min(c.b, o.b) < cell * .9;
         });
-        if (best && bestD >= 3) { chosen.push(best); picks.push(best); }   /* ห่างกันอย่างน้อย ~3 ช่อง ไม่ให้กระจุก (จอแคบจะได้น้อยช่องลงเอง) */
-      });
-      picks.sort(function (a, b) { return a.r - b.r || a.c - b.c; });
-      cells.forEach(function (el, i) {
-        var p = picks[i];
-        if (p) {
-          el.style.setProperty('--c', p.c);
-          el.style.setProperty('--r', p.r);
-          el.style.display = '';
-          el.classList.add('is-placed');
+      }
+      edge.forEach(function (el) {
+        el.style.display = '';
+        var box = el.getBoundingClientRect();
+        var r0 = parseInt(el.dataset.r0, 10), found = null;
+        [0, 1, -1, 2, -2, 3, -3].some(function (d) {
+          var r = r0 + d;
+          if (r < 1) return false;
+          var c = { l: box.left, r: box.right, t: r * cell, b: (r + 1) * cell };
+          if (hits(text, c, 8) || hits(badge, c, 0) || touches(c) || (!el.dataset.over && hits(card, c, 0))) return false;
+          found = { r: r, c: c };
+          return true;
+        });
+        if (found) {
+          el.style.setProperty('--r', found.r);
+          taken.push(found.c);
         } else {
-          /* ไม่มีที่ว่างพอสำหรับช่องนี้ → ซ่อน (ไม่ค้างตำแหน่งเดิมจากรอบก่อน) */
-          el.classList.remove('is-placed');
           el.style.display = 'none';
         }
       });
@@ -662,23 +645,4 @@
     });
 
   })();
-
-  /* ---------- Countdown สู่วันเรียน ([data-countdown]) ---------- */
-  document.querySelectorAll('[data-countdown]').forEach(function (row) {
-    var target = new Date(row.getAttribute('data-countdown')).getTime();
-    var nums = row.querySelectorAll('.cd-num');
-    function pad(n) { return String(n).padStart(2, '0'); }
-    function tick() {
-      var left = Math.max(0, target - Date.now());
-      var parts = [
-        Math.floor(left / 86400000),
-        Math.floor(left / 3600000) % 24,
-        Math.floor(left / 60000) % 60,
-        Math.floor(left / 1000) % 60,
-      ];
-      nums.forEach(function (el, i) { el.textContent = pad(parts[i]); });
-    }
-    tick();
-    setInterval(tick, 1000);
-  });
 })();
