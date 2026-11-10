@@ -45,4 +45,4 @@ python3 -m http.server 4317
 - ข้อมูล SEO (meta, Open Graph, JSON-LD Course + FAQPage) อยู่ใน `<head>` / ต้น `<body>` ของ `index.html`
 - ภาพแชร์ (Open Graph / X): `assets/images/og-image.jpg` 1200×630 (แปลงจาก `og-image.webp` เพราะบางแอปไม่แสดง WebP) อ้างด้วย URL เต็มบน Vercel
   ถ้าย้ายหน้าไปโดเมน efin.finance ให้เปลี่ยน URL ใน `og:image` และ `twitter:image` · แก้ภาพแล้วให้ล้างแคชที่ Facebook Sharing Debugger
-- โลโก้เครื่องมือ: n8n จาก repo ทางการ `n8n-io/n8n` (โลโก้ชุดปัจจุบันบน n8n.io), Telegram / ChatGPT (OpenAI) / Claude จาก Simple Icons ใส่สีตามแบรนด์
+- โลโก้เครื่องมือ: n8n แบบสัญลักษณ์โหนดชมพู `#EA4B71` + ตัวอักษรกรมท่า `#101330` (ภาพที่ผู้ใช้ให้ แปลงเป็น SVG ด้วยการ trace · `n8n-mark.svg` = เฉพาะสัญลักษณ์ ใช้ในตาราง hero), Telegram / ChatGPT (OpenAI) / Claude จาก Simple Icons ใส่สีตามแบรนด์
