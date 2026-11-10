@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!-- หน้าดูย้อนหลัง (โครงจาก RoboLab /watch · ข้อมูลจาก prototype "คอร์ส AI เฝ้าพอร์ต" #learning)
+         ยังไม่มีวิดีโอจริง: ทุกตอนแสดงหน้าจอล็อก (เปิดให้ดูหลังจบคอร์ส 5 วันทำการ) · หน้าสมาชิก → ไม่ให้ search engine เก็บ -->
+    <title>ดูย้อนหลัง · คอร์ส AI เฝ้าพอร์ต</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" href="https://www.efin.finance/shared/assets/favicon.ico" sizes="16x16 32x32 48x48" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="https://www.efin.finance/shared/assets/apple-icon.png" sizes="180x180" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" />
+    <!-- ไอคอน: โหลดเฉพาะ 8 ไอคอนที่ใช้ในหน้านี้ (เรียงตามตัวอักษร) เพิ่มไอคอนใหม่ต้องเพิ่มชื่อในรายการนี้ด้วย -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&icon_names=format_list_bulleted,keyboard_arrow_down,keyboard_arrow_up,lock,lock_clock,person,skip_next,skip_previous&display=block" />
+    <link rel="stylesheet" href="assets/css/tokens.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/watch.css" />
+</head>
+
+<body class="cw-page">
+    <div class="cw-root">
+        <header class="cw-header">
+            <a class="cw-header-brand" href="index.html" aria-label="กลับหน้าคอร์ส AI เฝ้าพอร์ต">
+                <img class="cw-logo" src="assets/images/efin-logo-nav.svg" alt="efin.finance" width="121" height="24" />
+            </a>
+            <span class="cw-avatar cw-avatar--sm" aria-hidden="true">
+                <span class="ms">person</span>
+                <span class="cw-avatar-dot"></span>
+            </span>
+        </header>
+
+        <div class="cw-layout">
+            <!-- จอ ≥1024: ปุ่มซ่อน/แสดงสารบัญด้านซ้าย · ≤1023 สารบัญเป็นแผ่นเลื่อนขึ้นจากล่าง (เปิดด้วยปุ่ม "ดูบทเรียน") -->
+            <button type="button" class="cw-sidebar-toggle cw-sidebar-toggle--open" aria-label="ซ่อนหรือแสดงสารบัญ"
+                aria-controls="cw-sidebar" aria-expanded="true">
+                <img src="assets/icons/sidebar.svg" alt="" width="22" height="22" />
+            </button>
+            <div class="cw-backdrop" hidden></div>
+
+            <aside class="cw-sidebar cw-sidebar--open" id="cw-sidebar" aria-label="สารบัญหลักสูตร">
+                <button type="button" class="cw-sidebar-handle" aria-label="ปิดสารบัญ"><span class="cw-handle-pill"></span></button>
+                <div class="cw-sidebar-head">
+                    <h2 class="cw-course-name">หลักสูตร AI เฝ้าพอร์ต</h2>
+                </div>
+                <div class="cw-lesson-list">
+                    <div class="cw-section is-open">
+                        <button type="button" class="cw-section-row" aria-expanded="true" aria-controls="cw-sec-1">
+                            <span class="cw-section-top">
+                                <span class="cw-section-name">วันที่ 1 · เลิกเฝ้าจอ <span class="nobr">ให้บอททำงานแทน</span></span>
+                                <span class="ms cw-section-chevron" aria-hidden="true">keyboard_arrow_up</span>
+                            </span>
+                            <span class="cw-section-meta"><span class="cw-section-count">0 / 7</span></span>
+                        </button>
+                        <ol class="cw-lessons" id="cw-sec-1">
+                            <li><button type="button" class="cw-lesson-btn" data-topic="ดูระบบจริงก่อนเริ่ม: สรุปหุ้นรายวัน แจ้งเตือนระหว่างวัน และปุ่มยืนยันคำสั่ง"><span class="cw-lesson-name">ตอนที่ 1</span><span class="cw-lesson-play" aria-hidden="true"><span class="ms">lock</span></span></button></li>
+                            <li><button type="button" class="cw-lesson-btn" data-topic="เปลี่ยนวิธีเทรดในหัวให้เป็นกติกาที่ชัดเจนด้วย Setup Card"><span class="cw-lesson-name">ตอนที่ 2</span><span class="cw-lesson-play" aria-hidden="true"><span class="ms">lock</span></span></button></li>
+                            <li><button type="button" class="cw-lesson-btn" data-topic="สร้างบอท Telegram ส่วนตัว"><span class="cw-lesson-name">ตอนที่ 3</span><span class="cw-lesson-play" aria-hidden="true"><span class="ms">lock</span></span></button></li>
+                            <li><button type="button" class="cw-lesson-btn" data-topic="ตั้งค่า n8n แบบ Cloud หรือติดตั้งบน Server ของตัวเอง"><span class="cw-lesson-name">ตอนที่ 4</span><span class="cw-lesson-play" aria-hidden="true"><span class="ms">lock</span></span></button></li>
+                            <li><button type="button" class="cw-lesson-btn" data-topic="สร้าง Workflow แรกที่ดึงราคา เทียบเกณฑ์ แล้วแจ้งเตือนเองทุกวัน"><span class="cw-lesson-name">ตอนที่ 5</span><span class="cw-lesson-play" aria-hidden="true"><span class="ms">lock</span></span></button></li>
+                            <li><button type="button" class="cw-lesson-btn" data-topic="เชื่อมข้อมูลตลาดผ่าน MCP: ราคา เส้นค่าเฉลี่ย บทวิเคราะห์ ปันผล"><span class="cw-lesson-name">ตอนที่ 6</span><span class="cw-lesson-play" aria-hidden="true"><span class="ms">lock</span></span></button></li>
+                            <li><button type="button" class="cw-lesson-btn" data-topic="เทคนิคพิเศษ: เฝ้าหุ้นตามกระแสเงินต่างชาติ"><span class="cw-lesson-name">ตอนที่ 7</span><span class="cw-lesson-play" aria-hidden="true"><span class="ms">lock</span></span></button></li>
+                        </ol>
+                    </div>
+                    <div class="cw-section">
+                        <button type="button" class="cw-section-row" aria-expanded="false" aria-controls="cw-sec-2">
+                            <span class="cw-section-top">
+                                <span class="cw-section-name">วันที่ 2 · ยกระดับเป็น <span class="nobr">AI Agent</span> <span class="nobr">ที่ดูแลทั้งพอร์ต</span></span>
+                                <span class="ms cw-section-chevron" aria-hidden="true">keyboard_arrow_down</span>
+                            </span>
+                            <span class="cw-section-meta"><span class="cw-section-count">0 / 6</span></span>
+                        </button>
+                        <ol class="cw-lessons" id="cw-sec-2" hidden>
+                            <li><button type="button" class="cw-lesson-btn" data-topic="สร้าง AI Agent ที่ถาม-ตอบเรื่องหุ้นในแชทได้"><span class="cw-lesson-name">ตอนที่ 1</span><span class="cw-lesson-play" aria-hidden="true"><span class="ms">lock</span></span></button></li>
+                            <li><button type="button" class="cw-lesson-btn" data-topic="เทคนิคพิเศษ: ตรวจพอร์ตแบบ All Weather และแจ้งเมื่อถึงเวลาพิจารณาปรับสมดุล"><span class="cw-lesson-name">ตอนที่ 2</span><span class="cw-lesson-play" aria-hidden="true"><span class="ms">lock</span></span></button></li>
+                            <li><button type="button" class="cw-lesson-btn" data-topic="ทำให้ระบบไว้ใจได้: รู้วันหยุดตลาด แจ้งเตือนเมื่อมีปัญหา ไม่ส่งซ้ำ"><span class="cw-lesson-name">ตอนที่ 3</span><span class="cw-lesson-play" aria-hidden="true"><span class="ms">lock</span></span></button></li>
+                            <li><button type="button" class="cw-lesson-btn" data-topic="รับราคาแบบ Real-time ผ่าน Settrade Streaming API"><span class="cw-lesson-name">ตอนที่ 4</span><span class="cw-lesson-play" aria-hidden="true"><span class="ms">lock</span></span></button></li>
+                            <li><button type="button" class="cw-lesson-btn" data-topic="ระบบส่งคำสั่งแบบกดยืนยัน: คุณเป็นผู้อนุมัติทุกครั้ง"><span class="cw-lesson-name">ตอนที่ 5</span><span class="cw-lesson-play" aria-hidden="true"><span class="ms">lock</span></span></button></li>
+                            <li><button type="button" class="cw-lesson-btn" data-topic="วัดผลและปรับปรุงกติกา พร้อมคุมต้นทุนระบบให้คุ้มกับขนาดพอร์ต"><span class="cw-lesson-name">ตอนที่ 6</span><span class="cw-lesson-play" aria-hidden="true"><span class="ms">lock</span></span></button></li>
+                        </ol>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="cw-main">
+                <h1 class="cw-main-titlebar">
+                    <span class="cw-titlebar-section" id="cw-t-section">วันที่ 1 · เลิกเฝ้าจอ <span class="nobr">ให้บอททำงานแทน</span></span><span class="cw-titlebar-sep" aria-hidden="true">:</span><span class="cw-titlebar-lesson" id="cw-t-lesson">ตอนที่ 1</span>
+                </h1>
+                <p class="cw-titlebar-topic" id="cw-t-topic" aria-live="polite">ดูระบบจริงก่อนเริ่ม: สรุปหุ้นรายวัน แจ้งเตือนระหว่างวัน และปุ่มยืนยันคำสั่ง</p>
+                <!-- กรอบวิดีโอแบบ RoboLab · ตอนนี้แสดงหน้าจอล็อก (ข้อความจาก prototype) เพราะวิดีโอเปิดให้ดูหลังจบคอร์ส
+                     เมื่อมีวิดีโอจริง ใส่ <video> หรือ iframe แทน .cw-player-lock (ปุ่มควบคุมแบบ RoboLab ดูได้ใน git ประวัติไฟล์นี้) -->
+                <div class="cw-player-wrap">
+                    <div class="cw-player">
+                        <div class="cw-player-bg"></div>
+                        <div class="cw-player-lock">
+                            <span class="ms" aria-hidden="true">lock_clock</span>
+                            <b>วิดีโอย้อนหลังยังไม่เปิดให้ดู</b>
+                            <span>จะเปิดให้ดูหลังจบคอร์ส 5 วันทำการ เราจะแจ้งทางอีเมลเมื่อพร้อม</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cw-video-nav">
+                    <button type="button" class="cw-vnav-btn cw-vnav-btn--outline" id="cw-prev"><span class="ms" aria-hidden="true">skip_previous</span>ก่อนหน้า</button>
+                    <button type="button" class="cw-vnav-btn cw-vnav-btn--primary" id="cw-next">ถัดไป<span class="ms" aria-hidden="true">skip_next</span></button>
+                </div>
+            </main>
+        </div>
+
+        <div class="cw-bottom-bar">
+            <button type="button" class="cw-bottom-lessons" aria-controls="cw-sidebar" aria-expanded="false">
+                <span class="ms" aria-hidden="true">format_list_bulleted</span><span>ดูบทเรียน</span>
+            </button>
+        </div>
+    </div>
+    <script src="assets/js/watch.js"></script>
+</body>
+
+</html>

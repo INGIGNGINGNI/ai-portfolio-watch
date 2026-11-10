@@ -1,0 +1,671 @@
+/* ==========================================================================
+   หน้าดูย้อนหลัง (watch.html) — โครงและค่าตาม RoboLab /watch (คลาส .cw-*)
+   โหลดหลัง tokens.css + style.css (ใช้ base, .ms และ token ชุดเดียวกัน)
+   - จอ ≥1024: หัว 48px · สารบัญซ้าย 345px (ซ่อนได้ด้วยปุ่มวงกลม) · เนื้อหาขวา: ชื่อตอน → หัวข้อตอน → วิดีโอ → ก่อนหน้า/ถัดไป (ไม่มีกล่องประกาศ .cw-announce-card แบบ RoboLab — ผู้ใช้ให้เอาออก)
+   - ≤1023: สารบัญเป็นแผ่นเลื่อนขึ้นจากล่าง (สูง 85dvh) เปิดด้วยแถบล่าง "ดูบทเรียน" · ปิดด้วยฉากหลัง / ที่จับ / Esc
+   - ส่วนที่เพิ่มจาก RoboLab: บรรทัดหัวข้อตอนใต้ชื่อ (.cw-titlebar-topic) · ในกรอบวิดีโอแสดงหน้าจอล็อก (.cw-player-lock) แทนตัวเล่น
+   ========================================================================== */
+.cw-page {
+    overflow: hidden;
+}
+
+.cw-root {
+    background: #fff;
+    flex-direction: column;
+    height: 100dvh;
+    display: flex;
+    overflow: hidden;
+}
+
+/* ---------- หัวหน้า ---------- */
+.cw-header {
+    z-index: 200;
+    background: rgba(255, 255, 255, .5);
+    border-bottom: 1px solid #f7f7f7;
+    flex-shrink: 0;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    height: 48px;
+    padding: 0 24px;
+    display: flex;
+}
+
+.cw-header-brand {
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+    display: flex;
+}
+
+.cw-logo {
+    flex-shrink: 0;
+    width: auto;
+    height: 24px;
+}
+
+.cw-avatar {
+    background: #d9d9d9;
+    border: 1px solid #f7f7f7;
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+    display: grid;
+    place-items: center;
+    color: #fff;
+}
+
+.cw-avatar--sm {
+    width: 32px;
+    height: 32px;
+}
+
+.cw-avatar .ms {
+    font-size: 20px;
+}
+
+.cw-avatar-dot {
+    background: #fbab24;
+    border: 2px solid #eaecf0;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.cw-avatar--sm .cw-avatar-dot {
+    width: 10px;
+    height: 10px;
+    bottom: -1px;
+    right: -1px;
+}
+
+/* ---------- โครงหลัก ---------- */
+.cw-layout {
+    flex: 1 1 0%;
+    min-height: 0;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ปุ่มซ่อน/แสดงสารบัญ (จอ ≥1024): เปิด = ขาว อยู่มุมขวาบนของสารบัญ · ปิด = ฟ้าอ่อน ชิดซ้าย */
+.cw-sidebar-toggle {
+    z-index: 160;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    background: var(--color-blue-100);
+    border: none;
+    border-radius: 50%;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    transition: left .28s, background .15s;
+    display: flex;
+    position: absolute;
+    top: 14px;
+    left: 8px;
+}
+
+.cw-sidebar-toggle--open {
+    background: #fff;
+    left: 284px;
+}
+
+.cw-sidebar-toggle:hover {
+    background: var(--color-blue-100);
+}
+
+.cw-sidebar-toggle img {
+    width: 22px;
+    height: 22px;
+}
+
+@media (min-width: 1024px) {
+
+    /* สารบัญปิด: แถบไล่สีกว้าง 52px + เส้นขอบ (ที่วางปุ่มเปิด) */
+    .cw-layout--sidebar-closed::before {
+        content: "";
+        z-index: 100;
+        pointer-events: none;
+        background: linear-gradient(18deg, #e2f1ff 13.07%, #fff 74.52%);
+        width: 52px;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .cw-layout--sidebar-closed::after {
+        content: "";
+        background: var(--color-border);
+        z-index: 100;
+        pointer-events: none;
+        width: 1px;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 52px;
+    }
+}
+
+.cw-backdrop {
+    z-index: 149;
+    cursor: pointer;
+    opacity: 0;
+    background: rgba(0, 0, 0, .4);
+    transition: opacity .28s;
+    position: fixed;
+    inset: 0;
+}
+
+.cw-backdrop--visible {
+    opacity: 1;
+}
+
+/* ---------- สารบัญ ---------- */
+.cw-sidebar {
+    border-right: 1px solid var(--color-border);
+    z-index: 150;
+    background: linear-gradient(18deg, #e2f1ff 13.07%, #fff 74.52%);
+    flex-direction: column;
+    flex-shrink: 0;
+    align-self: stretch;
+    width: 0;
+    min-height: 0;
+    transition: width .28s;
+    display: flex;
+    overflow: hidden;
+}
+
+.cw-sidebar--open {
+    width: 345px;
+}
+
+.cw-sidebar-handle {
+    display: none;
+}
+
+.cw-handle-pill {
+    background: #d1d5db;
+    border-radius: 2px;
+    width: 36px;
+    height: 4px;
+}
+
+.cw-sidebar-head {
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+    padding: 14px 24px 12px;
+}
+
+.cw-course-name {
+    font-family: var(--font-thai);
+    font-size: var(--text-lg);
+    color: var(--color-text-primary);
+    margin: 6px 0 10px;
+    font-weight: 700;
+    line-height: 1.45;
+    /* เว้นที่ให้ปุ่มซ่อนสารบัญด้านขวา */
+    padding-right: 40px;
+}
+
+.cw-lesson-list {
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    flex: 1 1 0%;
+    overflow-y: auto;
+}
+
+.cw-lesson-list::-webkit-scrollbar {
+    width: 2px;
+}
+
+.cw-lesson-list::-webkit-scrollbar-track {
+    background: none;
+    margin: 4px 0;
+}
+
+.cw-lesson-list::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 99px;
+}
+
+.cw-section {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.cw-section-row {
+    cursor: pointer;
+    text-align: left;
+    background: none;
+    border: none;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+    padding: 12px 24px;
+    transition: background .15s;
+    display: flex;
+}
+
+.cw-section-row:hover {
+    background: var(--color-off-white);
+}
+
+.cw-section-row:hover .cw-section-chevron {
+    color: var(--color-primary);
+}
+
+.cw-section-top {
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 6px;
+    width: 100%;
+    display: flex;
+}
+
+.cw-section-name {
+    font-family: var(--font-thai);
+    font-size: var(--text-base);
+    color: var(--color-black);
+    flex: 1 1 0%;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.cw-section-chevron {
+    color: var(--color-text-tertiary);
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 18px;
+}
+
+.cw-section-meta {
+    align-items: center;
+    gap: 8px;
+    display: flex;
+}
+
+.cw-section-count {
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--r-full);
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    align-items: center;
+    padding: 1px 7px;
+    font-weight: 500;
+    display: inline-flex;
+}
+
+.cw-lesson-btn {
+    cursor: pointer;
+    text-align: left;
+    background: none;
+    border: none;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 11px 24px;
+    transition: background .15s;
+    display: flex;
+}
+
+.cw-lesson-btn:hover {
+    background: var(--color-blue-50);
+}
+
+.cw-lesson-btn:focus-visible,
+.cw-section-row:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+}
+
+.cw-lesson-btn--active {
+    background: linear-gradient(135deg, rgba(255, 255, 255, .5) 12%, #d6f2ff 100%);
+}
+
+.cw-lesson-btn--active:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, .5) 12%, #c4e8ff 100%);
+}
+
+.cw-lesson-name {
+    font-family: var(--font-thai);
+    color: var(--color-black);
+    font-size: var(--text-base);
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+.cw-lesson-btn--active .cw-lesson-name {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+/* วงกลมท้ายตอน: RoboLab = ปุ่มเล่น · ที่นี่ = กุญแจ (วิดีโอยังล็อก) */
+.cw-lesson-play {
+    border: 1.5px solid var(--color-border-light);
+    width: 26px;
+    height: 26px;
+    color: var(--color-text-tertiary);
+    border-radius: 50%;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    transition: border-color .15s, color .15s;
+    display: flex;
+}
+
+.cw-lesson-play .ms {
+    font-size: 16px;
+}
+
+.cw-lesson-btn:hover .cw-lesson-play,
+.cw-lesson-btn--active .cw-lesson-play {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* ---------- เนื้อหา ---------- */
+.cw-main {
+    flex-direction: column;
+    flex: 1 1 0%;
+    min-width: 0;
+    padding: 0 24px;
+    display: flex;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.cw-main-titlebar {
+    font-family: var(--font-thai);
+    text-align: left;
+    color: var(--color-primary);
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    align-items: baseline;
+    padding: 24px 0 4px;
+    font-size: var(--text-xl);
+    font-weight: 700;
+    line-height: 1.6;
+    text-wrap: balance;
+    display: flex;
+}
+
+.cw-titlebar-section {
+    color: var(--color-black);
+}
+
+.cw-titlebar-sep {
+    color: var(--color-text-secondary);
+    padding: 0 6px;
+}
+
+.cw-titlebar-lesson {
+    color: var(--color-primary);
+}
+
+/* หัวข้อของตอน (ข้อมูลจาก prototype) ใต้ชื่อตอน */
+.cw-titlebar-topic {
+    flex-shrink: 0;
+    margin: 0 0 16px;
+    font-size: var(--text-md);
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+}
+
+/* วิดีโอ 16:9 ตาม RoboLab: กรอบดำ radius 24 · ตัววิดีโอกว้างเต็มคอลัมน์แต่ไม่สูงเกิน 100dvh − 320px (สูตรเดียวกับ RoboLab)
+   จอกว้างที่ความสูงไม่พอ ตัววิดีโอแคบลง กรอบดำเหลือเป็นแถบซ้ายขวา */
+.cw-player-wrap {
+    background: #000;
+    border-radius: 24px;
+    flex-shrink: 0;
+    justify-content: center;
+    display: flex;
+    overflow: hidden;
+}
+
+.cw-player {
+    aspect-ratio: 16 / 9;
+    background: #1a1a2e;
+    width: min(100%, (100dvh - 320px) * 16 / 9);
+    min-width: min(100%, 480px);
+    position: relative;
+    overflow: hidden;
+    transition: opacity .18s;
+}
+
+.cw-player--fading {
+    opacity: 0;
+}
+
+.cw-player-bg {
+    background: linear-gradient(135deg, #1a2a3a 0%, #0d1b2a 100%);
+    position: absolute;
+    inset: 0;
+}
+
+/* หน้าจอล็อก (ข้อความจาก prototype) กลางกรอบวิดีโอ */
+.cw-player-lock {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 8px;
+    padding: 24px;
+    text-align: center;
+    color: #fff;
+}
+
+.cw-player-lock .ms {
+    font-size: 56px;
+    color: rgba(255, 255, 255, .85);
+    margin-bottom: 4px;
+}
+
+.cw-player-lock b {
+    font-size: var(--text-lg);
+    font-weight: 700;
+}
+
+.cw-player-lock span:last-child {
+    max-width: 420px;
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: rgba(255, 255, 255, .75);
+}
+
+.cw-video-nav {
+    flex-shrink: 0;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    display: flex;
+}
+
+.cw-vnav-btn {
+    border-radius: var(--r-full);
+    font-family: var(--font-thai);
+    font-size: var(--text-md);
+    cursor: pointer;
+    white-space: nowrap;
+    border: none;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 22px;
+    font-weight: 600;
+    transition: background .15s, opacity .15s;
+    display: inline-flex;
+}
+
+.cw-vnav-btn:disabled {
+    opacity: .35;
+    cursor: default;
+}
+
+.cw-vnav-btn .ms {
+    font-size: 20px;
+}
+
+.cw-vnav-btn--outline {
+    color: var(--color-primary);
+    border: 1.5px solid var(--color-primary);
+    background: none;
+}
+
+.cw-vnav-btn--outline:hover:not(:disabled) {
+    background: #f0f7ff;
+}
+
+.cw-vnav-btn--primary {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.cw-vnav-btn--primary:hover:not(:disabled) {
+    background: #0d539b;
+}
+
+/* ---------- แถบล่าง (≤1023) ---------- */
+.cw-bottom-bar {
+    background: #fff;
+    border-top: 1px solid var(--color-border);
+    z-index: 200;
+    flex-shrink: 0;
+    justify-content: space-between;
+    align-items: center;
+    height: 52px;
+    padding: 0 20px;
+    display: none;
+}
+
+.cw-bottom-lessons {
+    cursor: pointer;
+    font-family: var(--font-thai);
+    font-size: var(--text-base);
+    color: var(--color-primary);
+    background: none;
+    border: none;
+    align-items: center;
+    gap: 7px;
+    font-weight: 500;
+    display: flex;
+}
+
+.cw-bottom-lessons .ms {
+    font-size: 20px;
+}
+
+@media (min-width: 1024px) {
+    .cw-sidebar:not(.cw-sidebar--open)~.cw-main {
+        padding: 0 48px 0 92px;
+    }
+}
+
+@media (max-width: 1023px) {
+
+    .cw-sidebar-toggle {
+        display: none;
+    }
+
+    .cw-logo {
+        height: auto;
+        width: 90px;
+    }
+
+    .cw-main-titlebar {
+        font-size: 20px;
+        line-height: 1.5;
+        padding: 16px 0 4px;
+        display: block;
+    }
+
+    .cw-titlebar-topic {
+        font-size: var(--text-base);
+    }
+
+    .cw-main {
+        padding-bottom: max(52px, calc(52px + env(safe-area-inset-bottom)));
+    }
+
+    .cw-player {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .cw-player-wrap {
+        border-radius: 16px;
+    }
+
+    .cw-vnav-btn {
+        font-size: var(--text-base);
+        padding: 9px 16px;
+    }
+
+    .cw-bottom-bar {
+        padding-bottom: env(safe-area-inset-bottom);
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+    /* สารบัญ = แผ่นเลื่อนขึ้นจากล่าง */
+    .cw-sidebar {
+        border-right: none;
+        border-top: 1px solid var(--color-border);
+        border-radius: 16px 16px 0 0;
+        height: 85dvh;
+        transition: transform .28s;
+        position: fixed;
+        inset: auto 0 0;
+        transform: translateY(100%);
+        box-shadow: 0 -8px 32px rgba(0, 0, 0, .15);
+        width: 100% !important;
+        z-index: 250;
+    }
+
+    .cw-sidebar--open {
+        transform: translateY(0);
+    }
+
+    .cw-sidebar-handle {
+        cursor: pointer;
+        flex-shrink: 0;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 12px 0 8px;
+        background: none;
+        border: none;
+        display: flex;
+    }
+
+    .cw-course-name {
+        padding-right: 0;
+    }
+
+    .cw-backdrop {
+        z-index: 249;
+    }
+}
+
+/* จอเตี้ย (แนวนอนบนมือถือ/แท็บเล็ต): ไม่บีบวิดีโอ ให้เลื่อนดูแทน */
+@media (max-height: 640px) and (min-width: 1024px) {
+    .cw-player {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .cw-sidebar,
+    .cw-sidebar-toggle,
+    .cw-backdrop,
+    .cw-player {
+        transition: none;
+    }
+}

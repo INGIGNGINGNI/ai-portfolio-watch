@@ -4769,7 +4769,7 @@ section[id] {
 
 .teacher-media {
     position: relative;
-    margin-right: -24px;
+    margin-right: -40px;
     /* รูปยื่นเข้าใต้ฝั่งข้อมูลเล็กน้อย (ขอบรูปเป็นพื้นว่าง) → รูปกว้าง 531 */
     padding-left: 412px;
 }
