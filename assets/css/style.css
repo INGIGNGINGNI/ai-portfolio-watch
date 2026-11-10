@@ -4763,7 +4763,7 @@ section[id] {
     height: 100%;
     object-fit: contain;
     object-position: bottom center;
-    transform: scaleX(1);
+    transform: scaleX(-1);
     /* ให้ผู้สอนหันเข้าหาข้อมูลฝั่งขวา */
 }
 
@@ -4781,17 +4781,19 @@ section[id] {
 /* glass card — ค่าจาก RoboLab .s6-card: ขาวโปร่ง 10% + blur 12px, radius 16, padding 20/24/33, gap 24
    วางทางซ้ายของรูป เกยทับรูปเล็กน้อย และเบลอ watermark ด้านหลัง
    ใน HTML อยู่หลัง .teacher-right (≤1199px อยู่คอลัมน์ขวาใต้ข้อมูล) · จอใหญ่ลอยด้วย absolute อ้างอิง .teacher-grid
-   (ขอบล่างคอลัมน์รูป = ขอบล่าง grid เพราะรูปสูงกว่าฝั่งข้อมูล) */
+   (ขอบล่างคอลัมน์รูป = ขอบล่าง grid เพราะรูปสูงกว่าฝั่งข้อมูล)
+   left 29 (เดิม 85): รูปผู้สอนชุดใหม่แขนกว้างกว่า → ปลายบรรทัดในการ์ดห่างตัวผู้สอน ≥24px ข้อความไม่จมกับสูทที่เบลอ
+   การ์ดยื่นทับแขนเพิ่ม 40px ด้วย padding ขวา 64 (กว้าง 506) → ตัวการ์ดเกยแขนมากขึ้น แต่ข้อความอยู่ที่เดิม */
 .teacher-glass {
     position: absolute;
-    left: 85px;
+    left: 29px;
     bottom: 60px;
     z-index: 2;
-    width: 466px;
+    width: 506px;
     display: flex;
     flex-direction: column;
     gap: 24px;
-    padding: 20px 24px 33px;
+    padding: 20px 64px 33px 24px;
     border-radius: 16px;
     background: rgba(255, 255, 255, .1);
     -webkit-backdrop-filter: blur(12px);
@@ -5487,6 +5489,7 @@ section[id] {
         left: auto;
         bottom: auto;
         width: auto;
+        padding-right: 24px;
         grid-column: 2;
         grid-row: 2;
         background: rgba(255, 255, 255, .85);
