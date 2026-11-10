@@ -265,6 +265,113 @@
     update();
   })();
 
+  /* ---------- Hero grid มือถือ (≤767): กระจายช่องไอคอนในที่ว่างจริงของ hero ----------
+     จอแคบข้อความกว้างเกือบเต็มจอ และตำแหน่งตัดบรรทัดเปลี่ยนตามความกว้าง → ตั้งตำแหน่งตายตัวไม่ได้
+     วิธี: หาช่องตารางที่ไม่ทับข้อความ/กล่อง (ขยายขอบกัน 8px) ในแถว 2 ถึงแถวที่ mask ยังเห็นชัด (~73% ความสูง hero)
+     แล้วเลือกทีละช่องแบบ "ไกลจากช่องที่เลือกแล้วมากที่สุด" (เริ่มจากโลโก้ 2 ช่องที่ชิดขอบแถว 2)
+     ทุกช่องห่างกันอย่างน้อย 1 ช่องรอบด้าน (รวมแนวทแยง) และระยะรวม ≥3 ช่อง ไม่ให้กระจุก · ที่ไม่พอก็ใส่น้อยลง
+     คำนวณใหม่เมื่อฟอนต์โหลด / เปลี่ยนขนาดจอ */
+  (function heroGridMobile() {
+    var grid = document.querySelector('.hero-grid');
+    if (!grid || !window.matchMedia) return;
+    var hero = grid.parentElement;
+    var mq = window.matchMedia('(max-width: 767px)');
+    var cells = Array.prototype.slice.call(grid.querySelectorAll('.hg-m'));
+    if (!cells.length) return;
+
+    /* ระยะ translateY ที่ animation ตอนเลื่อนเข้า ([data-anim]) ยังค้างอยู่ — หักออกให้ได้ตำแหน่งจริง */
+    function animShift(el) {
+      var a = el.closest('[data-anim]');
+      if (!a) return 0;
+      var m = getComputedStyle(a).transform;
+      if (!m || m === 'none') return 0;
+      var v = m.match(/matrix\(([^)]+)\)/);
+      return v ? parseFloat(v[1].split(',')[5]) || 0 : 0;
+    }
+
+    function obstacles(top0) {
+      var rects = [];
+      function push(r, dy) {
+        if (r.width && r.height) rects.push({ l: r.left - 8, r: r.right + 8, t: r.top - dy - top0 - 8, b: r.bottom - dy - top0 + 8 });
+      }
+      hero.querySelectorAll('.hero-title, .hero-desc, .hero-trust').forEach(function (el) {
+        var dy = animShift(el);
+        var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n;
+        while ((n = w.nextNode())) {
+          if (!n.textContent.trim()) continue;
+          var rg = document.createRange();
+          rg.selectNodeContents(n);
+          Array.prototype.forEach.call(rg.getClientRects(), function (r) { push(r, dy); });
+        }
+      });
+      hero.querySelectorAll('.hero-eyebrow, .hero-offer, .hero-cta .btn, .trust-avatar, .hero-strip').forEach(function (el) {
+        push(el.getBoundingClientRect(), animShift(el));
+      });
+      return rects;
+    }
+
+    function layout() {
+      if (!mq.matches) return;
+      var cell = parseFloat(getComputedStyle(grid).getPropertyValue('--cell')) || 40;
+      var box = grid.getBoundingClientRect();
+      var W = grid.clientWidth, H = hero.offsetHeight;
+      var top0 = hero.getBoundingClientRect().top;
+      var obs = obstacles(top0);
+      var x0 = W / 2 - cell / 2;                     /* ขอบซ้ายช่อง c = 0 */
+      var cMin = Math.ceil(-x0 / cell), cMax = Math.floor((W - x0 - cell) / cell);
+      var rMax = Math.floor((H * 0.73) / cell) - 1;
+      var free = [];
+      for (var r = 2; r <= rMax; r++) {
+        for (var c = cMin; c <= cMax; c++) {
+          var L = box.left + x0 + c * cell, R = L + cell, T = r * cell, B = T + cell;
+          var hit = obs.some(function (o) { return Math.min(R, o.r) > Math.max(L, o.l) && Math.min(B, o.b) > Math.max(T, o.t); });
+          if (!hit) free.push({ c: c, r: r });
+        }
+      }
+      /* จุดเริ่ม: โลโก้ 2 ช่อง (แถว 2 ชิดขอบ) */
+      var chosen = [{ c: cMin, r: 2 }, { c: cMax, r: 2 }];
+      var picks = [];
+      cells.forEach(function () {
+        var best = null, bestD = -1;
+        free.forEach(function (p) {
+          var d = Infinity;
+          chosen.forEach(function (q) {
+            var dc = Math.abs(p.c - q.c), dr = Math.abs(p.r - q.r);
+            if (dc < 2 && dr < 2) d = -1;            /* ติดกัน → ใช้ไม่ได้ */
+            else d = Math.min(d, Math.sqrt(dc * dc + dr * dr * 1.4));
+          });
+          if (d > bestD) { bestD = d; best = p; }
+        });
+        if (best && bestD >= 3) { chosen.push(best); picks.push(best); }   /* ห่างกันอย่างน้อย ~3 ช่อง ไม่ให้กระจุก (จอแคบจะได้น้อยช่องลงเอง) */
+      });
+      picks.sort(function (a, b) { return a.r - b.r || a.c - b.c; });
+      cells.forEach(function (el, i) {
+        var p = picks[i];
+        if (p) {
+          el.style.setProperty('--c', p.c);
+          el.style.setProperty('--r', p.r);
+          el.style.display = '';
+          el.classList.add('is-placed');
+        } else {
+          /* ไม่มีที่ว่างพอสำหรับช่องนี้ → ซ่อน (ไม่ค้างตำแหน่งเดิมจากรอบก่อน) */
+          el.classList.remove('is-placed');
+          el.style.display = 'none';
+        }
+      });
+    }
+
+    var t = 0;
+    function request() { clearTimeout(t); t = setTimeout(layout, 120); }
+    layout();
+    /* ฟอนต์ไทยโหลดทีหลังทำให้บรรทัดตัดใหม่ → จัดใหม่ทุกครั้งที่ฟอนต์โหลดเสร็จ + เช็กซ้ำหลังหน้าโหลด */
+    if (document.fonts) {
+      if (document.fonts.ready) document.fonts.ready.then(layout);
+      if (document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', request);
+    }
+    window.addEventListener('resize', request);
+    window.addEventListener('load', function () { layout(); setTimeout(layout, 800); });
+  })();
+
   /* ---------- Accordion (details.disclosure): ยืด-หด .35s ease แบบ RoboLab (.faq-answer max-height .35s) ----------
      ใช้ <details>/<summary> เดิม (อ่านสถานะเปิด/ปิดได้เอง) แค่เพิ่มการยืดความสูง · ใน .faq-list เปิดได้ทีละข้อ
      ไม่มี JS / reduced motion = เปิดปิดทันที */
@@ -324,7 +431,35 @@
       p.setAttribute('tabindex', '0');
     });
     list.hidden = false;
-    list.parentElement.classList.add('has-tabs');
+    (list.closest('.curr-main') || list.parentElement).classList.add('has-tabs');
+
+    /* วันเวลาของวันที่เลือก แสดงข้าง tab (.day-when) · .day-meta ในการ์ดเหลือไว้ให้โปรแกรมอ่านจอ
+       แยก "วันที่ · เวลา" จาก .day-meta เป็น 2 ช่อง แต่ละช่องมีไอคอนนำหน้า (event = วันที่ · schedule = เวลา) */
+    var when = document.querySelector('.day-when');
+    /* แยกตรงคำว่า "เวลา" (ไม่แสดงคำนี้ · มีไอคอนนาฬิกาแทน) หรือตรง " · " · ข้อความในการ์ดยังมี "เวลา" ไว้ให้โปรแกรมอ่านจอ / ตอนไม่มี JS */
+    function splitMeta(t) {
+      var i = t.indexOf(' เวลา ');
+      if (i > -1) return [t.slice(0, i), t.slice(i + 6)];
+      return t.split(' · ');
+    }
+    var metas = panels.map(function (p) { var m = p.querySelector('.day-meta'); return m ? splitMeta(m.textContent.trim()) : []; });
+    var whenText = [];
+    if (when) {
+      ['event', 'schedule'].forEach(function (icon) {
+        var item = document.createElement('span');
+        item.className = 'day-when-item';
+        var ms = document.createElement('span');
+        ms.className = 'ms';
+        ms.textContent = icon;
+        var txt = document.createElement('span');
+        item.appendChild(ms);
+        item.appendChild(txt);
+        when.appendChild(item);
+        whenText.push(txt);
+      });
+      when.hidden = false;
+    }
+
 
     function select(i, focus) {
       tabs.forEach(function (t, k) {
@@ -333,6 +468,7 @@
         t.tabIndex = on ? 0 : -1;
         panels[k].classList.toggle('is-active', on);
       });
+      whenText.forEach(function (el, k) { el.textContent = metas[i][k] || ''; });
       if (focus) tabs[i].focus();
     }
 
