@@ -101,7 +101,7 @@
   --shadow-pop: 0 8px 24px #0000001a;
 
   /* ---------- Gradient ---------- */
-  --grad-hero: linear-gradient(to bottom, #edfaff 0%, #fff 100%);
+  --grad-hero: linear-gradient(to bottom, #edfaff 0%, #fff 100%); /* เท่ากับ RoboLab #hero ทุกค่า (เทียบ computed style แล้ว) */
   --grad-roadmap: linear-gradient(to bottom, #fff 0%, #d9edff 100%);
   --grad-roadmap-full: linear-gradient(#fff 0%, #d9edff 100%), radial-gradient(circle at 50% 100%, #007dfe1c 0%, #d9edff 100%), linear-gradient(#fff0 0%, #fff 100%); /* ค่าเต็มของ RoboLab #roadmap */
   --grad-vsl: linear-gradient(160deg, #0a2a50 3.8%, #111b25 96.2%);

@@ -655,11 +655,11 @@ section[id] {
     --logo: url('../icons/lucide/clock.svg');
 }
 
-/* สัญลักษณ์ n8n แบบโหนด (ตัดจากโลโก้ที่ผู้ใช้ให้ · สัดส่วน 91.5 : 48.3) */
+/* สัญลักษณ์ n8n (+++ จาก theSVG · สัดส่วน 240 : 96) */
 .hg-logo--n8n {
     --logo: url('../logos/n8n-mark.svg');
     width: calc(var(--cell) * .56);
-    aspect-ratio: 915 / 483;
+    aspect-ratio: 240 / 96;
 }
 
 .hg-logo--telegram {
@@ -2364,11 +2364,6 @@ section[id] {
 .logo-item img {
     width: auto;
     flex-shrink: 0;
-}
-
-/* โลโก้ n8n (สัญลักษณ์โหนดชมพู + ตัวอักษรกรมท่า สัดส่วน 3.67 : 1) สูงกว่าโลโก้อื่น ให้ตัวอักษรใกล้เคียงคำ Telegram/ChatGPT */
-.logo-item--n8n img {
-    height: 32px;
 }
 
 .logo-word {
@@ -6134,10 +6129,6 @@ section[id] {
         height: 22px;
     }
 
-    .logo-item--n8n img {
-        height: 26px;
-    }
-
     .logo-word {
         font-size: 16px;
     }
@@ -6282,6 +6273,10 @@ section[id] {
 
     .hero-benefit .ms {
         font-size: 24px;
+    }
+
+    .finalcta-title {
+        font-size: 22px;
     }
 
     .finalcta-btns .btn {
