@@ -623,10 +623,6 @@ section[id] {
     --logo: url('../icons/lucide/arrow-right-left.svg');
 }
 
-.hg-ico--network {
-    --logo: url('../icons/lucide/network.svg');
-}
-
 .hg-ico--workflow {
     --logo: url('../icons/lucide/workflow.svg');
 }
@@ -909,7 +905,7 @@ section[id] {
     filter: drop-shadow(0 24px 30px #0a2a5024);
 }
 
-/* มือ (hero-hand.webp 1536×1024 พื้นโปร่ง) — ตำแหน่งเป็น % ของภาพอ้างอิง 1086×1448
+/* มือ (เดิม hero-hand.webp 1536×1024 พื้นโปร่ง — ลบไฟล์แล้ว แฟ้มใน hero ถอดออกแล้ว) — ตำแหน่งเป็น % ของภาพอ้างอิง 1086×1448
    ปลายนิ้วตกบนกระเป๋าหน้าแฟ้ม · ขอบขวาของภาพมือเลยขอบเฟรม แขนจึงจบที่ขอบเฟรม */
 .folder-hand {
     position: absolute;

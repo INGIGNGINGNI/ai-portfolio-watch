@@ -121,7 +121,7 @@
   --grad-key-visual-border: linear-gradient(#007dfe 0%, #d6f2ff 100%);
 
   /* ---------- Texture ---------- */
-  /* ลายตารางเส้นประบนการ์ดเข้ม: หน้าตาเดียวกับ card-texture.webp (ขาว α .075 · เส้น 1.6px · ประ 6/6 · ใช้คู่ opacity .4)
+  /* ลายตารางเส้นประบนการ์ดเข้ม: หน้าตาเดียวกับภาพ card-texture.webp เดิม (ลบไฟล์แล้ว · ขาว α .075 · เส้น 1.6px · ประ 6/6 · ใช้คู่ opacity .4)
      แต่เป็น tile ช่อง 48px คงที่ ไม่โตตามขนาดการ์ดแบบภาพ cover */
   --tex-grid-dashed: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cg fill='none' stroke='%23fff' stroke-opacity='.075' stroke-width='1.6' stroke-dasharray='6 6'%3E%3Cpath d='M.8 0v48'/%3E%3Cpath d='M0 .8h48'/%3E%3C/g%3E%3C/svg%3E") center / 48px 48px;
 
